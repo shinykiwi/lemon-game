@@ -11,8 +11,10 @@ public class VolumeSlider : MonoBehaviour
 
     private void Awake()
     {
-        slider = GetComponent<Slider>();
+        slider = GetComponentInChildren<Slider>();
         audioMixerGroup.audioMixer.GetFloat(parameterName, out var initialVolume);
+        //Debug.Log(parameterName + initialVolume);
+        //Debug.Log(slider.value);
         slider.value = initialVolume;
     }
 
