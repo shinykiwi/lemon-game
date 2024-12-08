@@ -21,20 +21,14 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject menu;
     
-    
-    // Sounds
-    [Header("Sounds")]
-    [SerializeField] private AudioSource soundEffects;
-    [SerializeField] private AudioSource music;
-    [SerializeField] private AudioClip click;
-    [SerializeField] private AudioClip back;
-    
     // Main menu config
     [Header("Settings")] 
     [Tooltip("Scene to load upon play, if any. Will hide the menu instead if no scene asset.")]
     [SerializeField] private GameObject scene;
 
     [SerializeField] private Color[] _color;
+
+    private MenuAudio audio;
     
     // Main menu itself
     private Canvas canvas;
@@ -42,25 +36,11 @@ public class MainMenu : MonoBehaviour
     private void Awake()
     {
         canvas = GetComponent<Canvas>();
+        audio = GetComponentInChildren<MenuAudio>();
         
         // Hide the credits menu and the options menu to start with
         credits.SetActive(false);
         options.SetActive(false);
-    }
-
-    private void Start()
-    {
-        // If there's no audio source or there's no audio clip then skip this part
-        if (music == null || music.clip == null)
-        {
-            return;
-        }
-
-        // If not already playing, then play the main menu music
-        if (!music.isPlaying)
-        {
-            music.Play();
-        }
     }
 
     private void Update()
@@ -91,37 +71,13 @@ public class MainMenu : MonoBehaviour
     {
         canvas.enabled = true;
     }
-
-    /// <summary>
-    /// Plays the click sound.
-    /// </summary>
-    private void PlayClickSound()
-    {
-        soundEffects.clip = click;
-        if (!soundEffects.isPlaying)
-        {
-            soundEffects.Play();
-        }
-    }
-
-    /// <summary>
-    /// Plays the back sound.
-    /// </summary>
-    private void PlayBackSound()
-    {
-        soundEffects.clip = back;
-        if (!soundEffects.isPlaying)
-        {
-            soundEffects.Play();
-        }
-    }
-
+    
     /// <summary>
     /// Executes when the play button is clicked, loads the specified scene (if any).
     /// </summary>
     public void OnPlayButton()
     {
-        PlayClickSound();
+        audio.PlayClickSound();
         if (scene)
         {
             SceneManager.LoadScene(scene.name);
@@ -137,7 +93,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OnCreditsButton()
     {
-        PlayClickSound();
+        audio.PlayClickSound();
         
         // Show the credits menu
         credits.SetActive(true);
@@ -153,7 +109,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OnOptionsButton()
     {
-        PlayClickSound();
+        audio.PlayClickSound();
         
         // Show the options menu
         options.SetActive(true);
@@ -168,7 +124,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OnQuitButton()
     {
-        PlayClickSound();
+        audio.PlayBackSound();
         
         // Quits the game
         Application.Quit();
@@ -189,7 +145,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OnBackButton()
     {
-        PlayBackSound();
+        audio.PlayBackSound();
         HideAllButMain();
     }
     
