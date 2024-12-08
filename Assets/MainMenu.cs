@@ -15,6 +15,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button creditsButton;
     [SerializeField] private Button quitButton;
     
+    // Pages
+    [Header("Pages")] 
+    [SerializeField] private GameObject credits;
+    [SerializeField] private GameObject options;
+    [SerializeField] private GameObject menu;
+    
     
     // Sounds
     [Header("Sounds")]
@@ -26,15 +32,20 @@ public class MainMenu : MonoBehaviour
     // Main menu config
     [Header("Settings")] 
     [Tooltip("Scene to load upon play, if any. Will hide the menu instead if no scene asset.")]
-    [SerializeField] private SceneAsset scene;
+    [SerializeField] private GameObject scene;
+
+    [SerializeField] private Color[] _color;
     
     // Main menu itself
     private Canvas canvas;
 
-
     private void Awake()
     {
         canvas = GetComponent<Canvas>();
+        
+        // Hide the credits menu and the options menu to start with
+        credits.SetActive(false);
+        options.SetActive(false);
     }
 
     private void Start()
@@ -49,6 +60,19 @@ public class MainMenu : MonoBehaviour
         if (!music.isPlaying)
         {
             music.Play();
+        }
+    }
+
+    private void Update()
+    {
+        // If the player is in a menu (other than main menu)
+        if (credits.activeSelf || options.activeSelf)
+        {
+            // If the escape key is pressed
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                OnBackButton(); // do the same thing as if the back button was clicked
+            }
         }
     }
 
@@ -108,18 +132,65 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called by the credits button in the UI.
+    /// </summary>
     public void OnCreditsButton()
     {
         PlayClickSound();
+        
+        // Show the credits menu
+        credits.SetActive(true);
+        
+        // Hide the options and credits menu
+        options.SetActive(false);
+        menu.SetActive(false);
+
     }
 
+    /// <summary>
+    /// Called be the options button in the UI.
+    /// </summary>
     public void OnOptionsButton()
     {
         PlayClickSound();
+        
+        // Show the options menu
+        options.SetActive(true);
+        
+        // Hide the credits and main menu
+        credits.SetActive(false);
+        menu.SetActive(false);
     }
 
+    /// <summary>
+    /// Called by the quit button in the UI, quits the game in a build version.
+    /// </summary>
     public void OnQuitButton()
     {
         PlayClickSound();
+        
+        // Quits the game
+        Application.Quit();
     }
+
+    /// <summary>
+    /// Hides every menu except for the main menu.
+    /// </summary>
+    private void HideAllButMain()
+    {
+        credits.SetActive(false);
+        options.SetActive(false);
+        menu.SetActive(true);
+    }
+
+    /// <summary>
+    /// Called when any back button is pressed in the UI.
+    /// </summary>
+    public void OnBackButton()
+    {
+        PlayBackSound();
+        HideAllButMain();
+    }
+    
 }
