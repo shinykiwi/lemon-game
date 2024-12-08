@@ -9,19 +9,21 @@ public class PauseMenu : MonoBehaviour
 
    [SerializeField] private GameObject options;
    [SerializeField] private GameObject pause;
+   [SerializeField] private GameObject controls;
 
    private void Awake()
    {
       canvas = GetComponent<Canvas>();
       audio = GetComponentInChildren<MenuAudio>();
       
+      // Hide other menus to start
       options.SetActive(false);
+      controls.SetActive(false);
    }
 
    private void Toggle()
    {
       canvas.enabled = !canvas.enabled;
-      
    }
    
    public void OnResumeButtonClick()
@@ -32,24 +34,39 @@ public class PauseMenu : MonoBehaviour
 
    public void OnOptionsButtonClick()
    {
+      audio.PlayClickSound();
+      
       // Show the options panel
       options.SetActive(true);
       
       // Hide the pause panel
       pause.SetActive(false);
-      
-      audio.PlayClickSound();
+      controls.SetActive(false);
    }
 
    public void OnBackButtonClick()
    {
-      // Hide the options panel
-      options.SetActive(false);
+      audio.PlayBackSound();
       
       // Show the pause panel
       pause.SetActive(true);
       
-      audio.PlayBackSound();
+      // Hide the other panels
+      options.SetActive(false);
+      controls.SetActive(false);
+   }
+
+   public void OnControlsMenuClick()
+   {
+      audio.PlayClickSound();
+      
+      // Show the controls menu
+      controls.SetActive(true);
+      
+      // Hide the other menus
+      pause.SetActive(false);
+      options.SetActive(false);
+      
    }
 
    public void OnQuitButtonClick()
