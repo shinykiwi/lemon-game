@@ -79,7 +79,15 @@ public class PauseMenu : MonoBehaviour
    {
       if (Input.GetKeyDown(KeyCode.Escape))
       {
-         Toggle();
+         if (pause.activeSelf)
+         {
+            Toggle();
+         }
+         else
+         {
+            OnBackButtonClick();
+         }
+         
       }
    }
 }
