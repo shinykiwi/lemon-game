@@ -26,8 +26,6 @@ public class MainMenu : MonoBehaviour
     [Tooltip("Scene to load upon play, if any. Will hide the menu instead if no scene asset.")]
     [SerializeField] private GameObject scene;
 
-    [SerializeField] private Color[] _color;
-
     private MenuAudio audio;
     
     // Main menu itself
