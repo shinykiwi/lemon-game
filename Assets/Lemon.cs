@@ -4,31 +4,40 @@ using UnityEngine;
 
 public class Lemon : MonoBehaviour
 {
+    [Header("Debug Only")] 
+    [SerializeField] private bool debugOn = true;
     [SerializeField] private TextMeshProUGUI xText;
     [SerializeField] private TextMeshProUGUI zText;
+    [SerializeField] private TextMeshProUGUI scaleText;
     
+    [Header("Parameters")]
     [SerializeField] GameObject circle;
     [SerializeField] private float limit = 0.5f;
     [SerializeField] private float speed = 1;
-    private Vector3 center;
+    [SerializeField] private float scaleFactor = 2f;
+    
+    // For controlling the movement of the slice
     private float x = 0;
+    private float y = 0;
     private float scale = 0;
     private bool knifeOn = true;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private float initialCircleScale;
+    private Vector3 localCirclePos;
+
+    private void Start()
     {
-        center = transform.position;
-        scale = circle.transform.localScale.x;
+        initialCircleScale = circle.transform.localScale.x;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        MoveCircle();
+        MoveSlicer();
     }
 
-    void MoveCircle()
+    /// <summary>
+    /// Moves the slicing guide circle back and forth (sine).
+    /// </summary>
+    void MoveSlicer()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -37,17 +46,23 @@ public class Lemon : MonoBehaviour
 
         if (knifeOn)
         {
-            Vector3 pos = circle.transform.localPosition;
+            // Moves the circle back and forth
+            localCirclePos = circle.transform.localPosition; // current position
             x += Time.deltaTime;
-            xText.text = x.ToString("0.000");
-            zText
-        
-            float z = limit * Mathf.Sin(speed*x);
-            circle.transform.localPosition = new Vector3(pos.x, pos.x, z);
+            y = limit * Mathf.Sin(speed*x);
+            circle.transform.localPosition = new Vector3(localCirclePos.x, localCirclePos.x, y);
+            
+            // Decreases the size of the circle as it moves further away from the center
+            scale = (-scaleFactor * Mathf.Pow(y, 2)) + initialCircleScale;
+            circle.transform.localScale = new Vector3(scale, scale, scale);
 
-            // scale *= z;
-            // //Vector3 circleScale = circle.transform.localScale;
-            // circle.transform.localScale = new Vector3(scale, scale, scale);
+            if (debugOn)
+            {
+                xText.text = x.ToString("0.000");
+                zText.text = y.ToString("0.000");
+                scaleText.text = scale.ToString("0.000");
+            }
+            
         }
         
     }
