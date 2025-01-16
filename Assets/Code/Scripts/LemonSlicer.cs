@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class Lemon : MonoBehaviour
+public class LemonSlicer : MonoBehaviour
 {
     [Header("Debug Only")] 
     [SerializeField] private bool debugOn = true;
