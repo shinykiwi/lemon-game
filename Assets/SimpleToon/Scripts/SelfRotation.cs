@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-
-public class SelfRotation : MonoBehaviour
+namespace SimpleToon.Scripts
 {
-    public float Speed;
-
-    public void Update()
+    public class SelfRotation : MonoBehaviour
     {
-        transform.Rotate(Vector3.up, Speed * Time.deltaTime);
+        public float Speed;
+
+        public void Update()
+        {
+            transform.Rotate(Vector3.up, Speed * Time.deltaTime);
+        }
     }
 }

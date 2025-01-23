@@ -1,229 +1,294 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
-public class MeshSlicer : MonoBehaviour
+namespace Code.Scripts
 {
-    public GameObject originalObject; // Object to slice
-    public float zValue;
-    public GameObject tinySphere;
-    
-    private Vector3 planePoint;
-    private Vector3 planeNormal;
-    
-    
-    private int triangleCounter = 0;
-
-    private void Start()
+    public class MeshSlicer : MonoBehaviour
     {
-        planePoint = new Vector3(0, 0, zValue);
-        planeNormal = new Vector3(0, 0, 1);
-    }
+        public GameObject originalObject; // Object to slice
+        public float zValue;
+        public GameObject tinySphere;
+    
+        private Vector3 planePoint;
+        private Vector3 planeNormal;
 
-    public void SliceMesh()
-    {
-        // Get the original mesh
-        Mesh originalMesh = originalObject.GetComponent<MeshFilter>().mesh;
-        
-        // Get the original vertices
-        Vector3[] vertices = originalMesh.vertices;
-        
-        // Get the original triangles
-        int[] triangles = originalMesh.triangles;
+        Mesh originalMesh;
+        Vector3[] vertices;
+        int[] triangles;
+    
+        List<Vector3> positiveVertices;
+        List<Vector3> negativeVertices;
+    
+        List<int> positiveTriangles;
+        List<int> negativeTriangles;
 
-        // Create lists to hold the vertices of pos and neg sides
-        List<Vector3> positiveVertices = new List<Vector3>();
-        List<Vector3> negativeVertices = new List<Vector3>();
-        
-        // Create list to hold the triangles of pos and neg sides
-        List<int> positiveTriangles = new List<int>();
-        List<int> negativeTriangles = new List<int>();
+        private int triangleCounter;
 
-        // Create a mapping to make sure there are no duplicates when adding tris and verts
-        Dictionary<Vector3, int> positiveVertexMap = new Dictionary<Vector3, int>();
-        Dictionary<Vector3, int> negativeVertexMap = new Dictionary<Vector3, int>();
+        public TextMeshProUGUI triText;
+        public TextMeshProUGUI vertText;
 
-        // For each triangle
-        for (int i = 0; i < triangles.Length; i += 3)
+        private void Start()
         {
-            // Get the 3 vertices of the triangle
-            Vector3 v0 = vertices[triangles[i]];
-            Vector3 v1 = vertices[triangles[i + 1]];
-            Vector3 v2 = vertices[triangles[i + 2]];
+            planePoint = new Vector3(0, 0, zValue);
+            planeNormal = new Vector3(0, 0, 1);
+        
+            // Get the original mesh
+            originalMesh = originalObject.GetComponent<MeshFilter>().mesh;
+        
+            // Get the original vertices
+            vertices = originalMesh.vertices;
+        
+            // Get the original triangles
+            triangles = originalMesh.triangles;
 
-            // Classify vertices, if d > 0, then positive, else negative
-            float d0 = Distance(v0);
-            float d1 = Distance(v1);
-            float d2 = Distance(v2);
-            
-            bool v0Positive = d0 > 0;
-            bool v1Positive = d1 > 0;
-            bool v2Positive = d2 > 0;
+            // Create lists to hold the vertices of pos and neg sides
+            positiveVertices = new List<Vector3>();
+            negativeVertices = new List<Vector3>();
+        
+            // Create list to hold the triangles of pos and neg sides
+            positiveTriangles = new List<int>();
+            negativeTriangles = new List<int>();
+        
+        }
 
-            // Count how many were on the positive side
-            int positiveCount = (v0Positive ? 1 : 0) + (v1Positive ? 1 : 0) + (v2Positive ? 1 : 0);
-
-            // All vertices are on the positive side
-            if (positiveCount == 3)
+        public void SliceMesh()
+        {
+            // For each triangle
+            for (int i = 0; i < triangles.Length; i += 3)
             {
-                AddTriangle(v0, v1, v2, positiveVertices, positiveTriangles, positiveVertexMap);
+                // Get the 3 vertices of the triangle
+                Vector3 v0 = vertices[triangles[i]];
+                Vector3 v1 = vertices[triangles[i + 1]];
+                Vector3 v2 = vertices[triangles[i + 2]];
+
+                // Classify vertices, if d > 0, then positive, else negative
+                float d0 = Distance(v0);
+                float d1 = Distance(v1);
+                float d2 = Distance(v2);
+                
+                bool v0Positive = d0 > 0;
+                bool v1Positive = d1 > 0;
+                bool v2Positive = d2 > 0;
+
+                // Count how many were on the positive side
+                int positiveCount = (v0Positive ? 1 : 0) + (v1Positive ? 1 : 0) + (v2Positive ? 1 : 0);
+
+                // All vertices are on the positive side
+                if (positiveCount == 3)
+                {
+                    AddTriangle(v0, v1, v2, true);
+                }
+        
+                // All vertices are on the negative side
+                else if (positiveCount == 0)
+                {
+                    AddTriangle(v0, v1, v2, false);
+                }
+        
+                // The triangle is intersected by the slicing plane
+                // In this case, we will need to split the triangle onto pos and neg side
+                else
+                {
+                    SplitTriangle2(v0, v1, v2, v0Positive, v1Positive, v2Positive);
+                }
             }
+
+            // Create new meshes
+            CreateMesh(positiveVertices, positiveTriangles, "Positive Side");
+            CreateMesh(negativeVertices, negativeTriangles, "Negative Side");
+        
+            // Hide original mesh
+            originalObject.GetComponent<MeshRenderer>().enabled = false;
             
-            // All vertices are on the negative side
-            else if (positiveCount == 0)
+            // Display total stats
+            vertText.text = "PositiveVertices: " + positiveVertices.Count + ", NegativeVertices: " +
+                           negativeVertices.Count;
+
+            triText.text = "PositiveTriangles: " + positiveTriangles.Count / 3 + ", NegativeTriangles: " +
+                           negativeTriangles.Count / 3;
+
+
+        }
+    
+        private float Distance(Vector3 vertex)
+        {
+            return Vector3.Dot(planeNormal, vertex - planePoint);
+        }
+    
+        private void SplitTriangle2(Vector3 A, Vector3 B, Vector3 C, bool vAPositive, bool vBPositive, bool vCPositive)
+        {
+            Vector3 E, F;
+
+            float tolerance = 0.001f;
+            
+            // Edge case: what if a vector lies on the z-value exactly
+            if (Math.Abs(A.z - zValue) < tolerance)
             {
-                AddTriangle(v0, v1, v2, negativeVertices, negativeTriangles, negativeVertexMap);
+                Debug.Log("We got an edge case!");
+
+                E = FindIntersection(C, B);
+                
+                AddTriangle(A,B,E,true,true);
+                AddTriangle(A,E,C,false,true);
             }
+        
+            // If A and C are negative, and B is positive
+            else if (!vAPositive && !vCPositive && vBPositive)
+            {
+                E = FindIntersection(A, B);
+                F = FindIntersection(C, B);
             
-            // The triangle is intersected by the slicing plane
-            // In this case, we will need to split the triangle onto pos and neg side
+                AddTriangle(E, B, F, true, true);
+                AddTriangle(A,E,F,false,true);
+                AddTriangle(A,F,C,false, true);
+            }
+        
+            // If A and B are positive, and C is negative
+            else if (vAPositive && vBPositive && !vCPositive)
+            {
+                E = FindIntersection(A, C);
+                F = FindIntersection(C, B);
+            
+                AddTriangle(A, B, E, true, true);
+                AddTriangle(E, B, F, true, true);
+                AddTriangle(E,F,C, false, true);
+            }
+        
+            // If B and C are positive and A is negative
+            else if (!vAPositive && vBPositive && vCPositive)
+            {
+                E = FindIntersection(A, B);
+                F = FindIntersection(A, C);
+            
+                AddTriangle(E,B,F,true, true);
+                AddTriangle(F,B,C,true, true);
+                AddTriangle(A,E,F,false, true);
+            }
+
             else
             {
-                SplitTriangle(v0, v1, v2, v0Positive, v1Positive, v2Positive,
-                    positiveVertices, negativeVertices, positiveTriangles, negativeTriangles,
-                    positiveVertexMap, negativeVertexMap);
+                Debug.Log("Not sure what to put here...");
+                
             }
-        }
-
-        // Create new meshes
-        CreateMesh(positiveVertices, positiveTriangles, "Positive Side");
-        CreateMesh(negativeVertices, negativeTriangles, "Negative Side");
+            
         
-        // Hide original mesh
-        originalObject.SetActive(false);
-    }
+        }
     
-    private float Distance(Vector3 vertex)
-    {
-        return Vector3.Dot(planeNormal, vertex - planePoint);
-    }
-    private void SplitTriangle(Vector3 v0, Vector3 v1, Vector3 v2, bool v0Positive, bool v1Positive, bool v2Positive,
-        List<Vector3> positiveVertices, List<Vector3> negativeVertices,
-        List<int> positiveTriangles, List<int> negativeTriangles,
-        Dictionary<Vector3, int> positiveVertexMap, Dictionary<Vector3, int> negativeVertexMap)
-    {
-        
-        Vector3 positiveA, positiveB, negativeA, intersection1, intersection2;
+        private Vector3 FindIntersection(Vector3 start, Vector3 end)
+        {
+            float z = zValue;
+            // Calculate the interpolation factor t
+            float t = (z - start.z) / (end.z - start.z);
 
-        // If the 1st vertex and 2nd vertex are on one side together
-        if (v0Positive && v1Positive)
-        {
-            positiveA = v0; positiveB = v1; negativeA = v2;
-        }
-        
-        // If the 2nd vertex and the 3rd vertex are on one side together
-        else if (v1Positive && v2Positive)
-        {
-            positiveA = v1; positiveB = v2; negativeA = v0;
+            // Interpolate to find the intersection point
+            return new Vector3(
+                Mathf.Lerp(start.x, end.x, t), // Interpolated X
+                Mathf.Lerp(start.y, end.y, t), // Interpolated Y
+                z                             // Fixed Z
+            );
         }
 
-        // If the 1st and 3rd vertex are on one side together
-        else
+        private Vector3 RoundVector(Vector3 v, int decimals = 3)
         {
-            positiveA = v2; positiveB = v0; negativeA = v1;
+            return new Vector3((float) Math.Round(v.x, decimals), (float) Math.Round(v.y, decimals), (float) Math.Round(v.z, decimals));
+        }
+        
+        private bool IsValidTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
+        {
+            return Vector3.Cross(v2 - v1, v3 - v1).sqrMagnitude > 0.0001f;
         }
 
-        // Find the intersection point that lies on the two intersection edges
-        intersection1 = FindIntersection(positiveA, negativeA, zValue);
-        intersection2 = FindIntersection(positiveB, negativeA, zValue);
-        
-        // Add new triangles to each side
-        AddTriangle(positiveA, positiveB, intersection1, positiveVertices, positiveTriangles, positiveVertexMap, true);
-        AddTriangle(positiveB, intersection2, intersection1, positiveVertices, positiveTriangles, positiveVertexMap, true);
-        AddTriangle(negativeA, intersection1, intersection2, negativeVertices, negativeTriangles, negativeVertexMap, true);
-    }
-    
-    private Vector3 FindIntersection(Vector3 start, Vector3 end, float z)
-    {
-        // Calculate the interpolation factor t
-        float t = (z - start.z) / (end.z - start.z);
 
-        // Interpolate to find the intersection point
-        return new Vector3(
-            Mathf.Lerp(start.x, end.x, t), // Interpolated X
-            Mathf.Lerp(start.y, end.y, t), // Interpolated Y
-            z                             // Fixed Z
-        );
-    }
-
-    private Vector3 RoundVector(Vector3 v, int decimals = 3)
-    {
-        return new Vector3((float) Math.Round(v.x, decimals), (float) Math.Round(v.y, decimals), (float) Math.Round(v.z, decimals));
-    }
-
-    private void AddTriangle(Vector3 v0, Vector3 v1, Vector3 v2, 
-        List<Vector3> vertices, List<int> triangles, Dictionary<Vector3, int> vertexMap, bool split = false)
-    {
-        
-        triangleCounter++;
-
-        int a = AddVertex(v0, vertices, vertexMap);
-        int b = AddVertex(v1, vertices, vertexMap);
-        int c = AddVertex(v2, vertices, vertexMap);
-        
-        triangles.Add(a);
-        triangles.Add(b);
-        triangles.Add(c);
-
-        string triangleName = "Triangle: (" + a + ", " + b + ", " + c + ")";
-
-        if (split)
+        private void AddTriangle(Vector3 v0, Vector3 v1, Vector3 v2, 
+            bool positive, bool split = false)
         {
-            Debug.Log("Adding split triangle # "+ triangleCounter + 
-                      "\n"+ triangleName + 
-                      "\nVertices: [" + 
-                      "("+v0.x+ ", " + v0.y+ ", " + v0.z + ")"+ 
-                      "("+v1.x+ ", " + v1.y+ ", " + v1.z + ")"+ 
-                      "("+v2.x+ ", " + v2.y+ ", " + v2.z + ")"+"]");
+            List<int> tris = positive ? positiveTriangles : negativeTriangles;
+            List<Vector3> verts = positive ? positiveVertices : negativeVertices;
+        
+            triangleCounter++;
             
-            AddRealVertex(v0, triangleName);
-            AddRealVertex(v1, triangleName);
-            AddRealVertex(v2, triangleName);
-            
-            
-        }
-
-    }
-
-    private void AddRealVertex(Vector3 vertex, string vName)
-    {
-        GameObject v = Instantiate(tinySphere, originalObject.transform);
-        v.transform.localPosition = vertex;
-        v.name = vName;
-    }
-
-    private int AddVertex(Vector3 vertex, List<Vector3> vertices, Dictionary<Vector3, int> vertexMap)
-    {
-        float threshold = 0.001f;
-        // Search through existing vertices
-        for (int i = 0; i < vertices.Count; i++)
-        {
-            // Check if the vertex is "close enough" to an existing vertex
-            if (Vector3.Distance(vertex, vertices[i]) < threshold)
+            // Checking for possible degenerate triangles
+            if (v0 == v1 || v1 == v2 || v0 == v2)
             {
-                return i; // Return the index of the close vertex
+                Debug.Log("We got a degenerate!");
+            }
+
+            if (!IsValidTriangle(v0, v1, v2))
+            {
+                Debug.Log("Not a valid triangle!");
+            }
+
+            int a = AddVertex(v0, verts, split);
+            int b = AddVertex(v1, verts, split);
+            int c = AddVertex(v2, verts, split);
+            
+        
+            tris.Add(a);
+            tris.Add(b);
+            tris.Add(c);
+
+            string triangleName = "Triangle: (" + a + ", " + b + ", " + c + ")";
+
+            if (split)
+            {
+                // Debug.Log("Adding split triangle # "+ triangleCounter + 
+                //           "\n"+ triangleName + 
+                //           "\nVertices: [" + 
+                //           "("+v0.x+ ", " + v0.y+ ", " + v0.z + ")"+ 
+                //           "("+v1.x+ ", " + v1.y+ ", " + v1.z + ")"+ 
+                //           "("+v2.x+ ", " + v2.y+ ", " + v2.z + ")"+"]");
+            
             }
         }
 
-        // If no close vertex is found, add the new vertex
-        int index = vertices.Count;
-        vertices.Add(vertex);
-        return index;
-    }
-
-    private void CreateMesh(List<Vector3> vertices, List<int> triangles, string name)
-    {
-        Mesh mesh = new Mesh
+        private void AddRealVertex(Vector3 vertex, string vName)
         {
-            vertices = vertices.ToArray(),
-            triangles = triangles.ToArray()
-        };
-        
-        mesh.RecalculateNormals();
+            GameObject v = Instantiate(tinySphere, originalObject.transform);
+            v.transform.localPosition = vertex;
+            v.name = vName;
+        }
 
-        GameObject meshObject = new GameObject(name);
-        meshObject.AddComponent<MeshFilter>().mesh = mesh;
-        meshObject.AddComponent<MeshRenderer>().material = originalObject.GetComponent<MeshRenderer>().material;
-        meshObject.transform.position = originalObject.transform.position;
+        private int AddVertex(Vector3 vertex, List<Vector3> verts, bool split)
+        {
+            float threshold = split ? 0.001f : 0.0001f;
+            // Search through existing vertices
+            for (int i = 0; i < verts.Count; i++)
+            {
+                // Check if the vertex is "close enough" to an existing vertex
+                if (Vector3.Distance(vertex, verts[i]) < threshold)
+                {
+                    return i; // Return the index of the close vertex
+                }
+            }
+
+            // If no close vertex is found, add the new vertex
+            int index = verts.Count;
+            verts.Add(vertex);
+            if (split)
+            {
+                AddRealVertex(vertex, "Index " + index);
+            }
+            
+            return index;
+        }
+
+        private void CreateMesh(List<Vector3> verts, List<int> tris, string mName)
+        {
+            Mesh mesh = new Mesh
+            {
+                vertices = verts.ToArray(),
+                triangles = tris.ToArray()
+            };
+        
+            mesh.RecalculateNormals();
+
+            GameObject meshObject = new GameObject(mName);
+            meshObject.AddComponent<MeshFilter>().mesh = mesh;
+            meshObject.AddComponent<MeshRenderer>().material = originalObject.GetComponent<MeshRenderer>().material;
+            meshObject.transform.position = originalObject.transform.position;
+            meshObject.AddComponent<TestClass>();
+        }
     }
 }

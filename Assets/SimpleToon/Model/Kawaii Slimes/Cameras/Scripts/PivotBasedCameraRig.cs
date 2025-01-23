@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 
-
-namespace UnityStandardAssets.Cameras
+namespace SimpleToon.Model.Kawaii_Slimes.Cameras.Scripts
 {
     public abstract class PivotBasedCameraRig : AbstractTargetFollower
     {
