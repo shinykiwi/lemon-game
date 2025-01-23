@@ -176,16 +176,14 @@ namespace Code.Scripts
                 AddTriangle(A,E,F,false, true);
             }
 
-            else if (vCPositive)
+            else
             {
-                Debug.Log("vCpositive");
-            }
-            else {
-                Debug.Log("Not sure what to put here...");
-                
+                E = FindIntersection(A, B);
+                F = FindIntersection(A, C);
+                AddTriangle(A,E,F,false, true);
             }
             
-        
+            
         }
     
         private Vector3 FindIntersection(Vector3 start, Vector3 end)
@@ -193,7 +191,7 @@ namespace Code.Scripts
             float z = zValue;
             // Calculate the interpolation factor t
             float t = (z - start.z) / (end.z - start.z);
-
+            
             // Interpolate to find the intersection point
             return new Vector3(
                 Mathf.Lerp(start.x, end.x, t), // Interpolated X
@@ -268,7 +266,7 @@ namespace Code.Scripts
 
         private int AddVertex(Vector3 vertex, List<Vector3> verts, bool split)
         {
-            float threshold = split ? 0.001f : 0.0001f;
+            float threshold = split ? 0.01f : 0.0001f;
             // Search through existing vertices
             for (int i = 0; i < verts.Count; i++)
             {
@@ -284,7 +282,7 @@ namespace Code.Scripts
             verts.Add(vertex);
             if (split)
             {
-                AddRealVertex(vertex, "Index " + index);
+                //AddRealVertex(vertex, "Index " + index);
             }
             
             return index;
