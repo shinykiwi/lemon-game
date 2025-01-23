@@ -24,11 +24,16 @@ namespace Code.Scripts
         List<int> positiveTriangles;
         List<int> negativeTriangles;
 
+        private Dictionary<int, Triangle> positiveMap;
+        private Dictionary<int, Triangle> negativeMap;
+
         private int triangleCounter;
 
         public TextMeshProUGUI triText;
         public TextMeshProUGUI vertText;
         public TextMeshProUGUI originalText;
+
+        private int n = 1;
 
         private void Start()
         {
@@ -261,7 +266,41 @@ namespace Code.Scripts
         {
             GameObject v = Instantiate(tinySphere, originalObject.transform);
             v.transform.localPosition = vertex;
-            v.name = vName;
+
+            float x = ((Mathf.Pow(vertex.x, 3)) + (float) Math.Round(vertex.y, 1)) *  (int) Math.Truncate(vertex.z * 100);
+            if (vertex.x < 0)
+            {
+                x *= -1;
+            }
+            int y;
+
+            //Mathf.Abs(x);
+            if (x < 1 && x > -1)
+            {
+                x *= 1000;
+                x = (float) Math.Truncate(x);
+                Mathf.Floor(x);
+                if (x >= 100 || x <=-100 )
+                {
+                    x /= 10;
+                    x = Mathf.Round(x);
+                }
+                v.name = x.ToString();
+            }
+            else
+            {
+                y = (int) Math.Truncate(x);
+                Debug.Log(y);
+                Mathf.Floor(y);
+                if (y >= 100 || y <=-100 )
+                {
+                    y /= 10;
+                    y = (int) Mathf.Round(y);
+                }
+                v.name = y.ToString();
+            }
+
+            n++;
         }
 
         private int AddVertex(Vector3 vertex, List<Vector3> verts, bool split)
@@ -282,7 +321,7 @@ namespace Code.Scripts
             verts.Add(vertex);
             if (split)
             {
-                //AddRealVertex(vertex, "Index " + index);
+                AddRealVertex(vertex, "Index " + index);
             }
             
             return index;
