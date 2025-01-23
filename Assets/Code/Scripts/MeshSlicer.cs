@@ -24,8 +24,8 @@ namespace Code.Scripts
         List<int> positiveTriangles;
         List<int> negativeTriangles;
 
-        private Dictionary<int, Triangle> positiveMap;
-        private Dictionary<int, Triangle> negativeMap;
+        private Dictionary<int, Vector3> positiveMap;
+        private Dictionary<int, Vector3> negativeMap;
 
         private int triangleCounter;
 
@@ -56,6 +56,10 @@ namespace Code.Scripts
             // Create list to hold the triangles of pos and neg sides
             positiveTriangles = new List<int>();
             negativeTriangles = new List<int>();
+
+            // Maps to prevent duplicates
+            positiveMap = new Dictionary<int, Vector3>();
+            negativeMap = new Dictionary<int, Vector3>();
 
             originalText.text = triangles.Length + " tris, " + vertices.Length + " verts.";
 
@@ -221,6 +225,7 @@ namespace Code.Scripts
         {
             List<int> tris = positive ? positiveTriangles : negativeTriangles;
             List<Vector3> verts = positive ? positiveVertices : negativeVertices;
+            Dictionary<int, Vector3> map = positive ? positiveMap : negativeMap;
         
             triangleCounter++;
             
@@ -232,18 +237,13 @@ namespace Code.Scripts
 
             if (!IsValidTriangle(v0, v1, v2))
             {
-                Debug.Log("Not a valid triangle!");
-            }
-            else
-            {
-                
+                //Debug.Log("Not a valid triangle!");
             }
             
-            int a = AddVertex(v0, verts, split);
-            int b = AddVertex(v1, verts, split);
-            int c = AddVertex(v2, verts, split);
+            int a = AddVertex(v0, verts, map, split);
+            int b = AddVertex(v1, verts, map, split);
+            int c = AddVertex(v2, verts, map, split);
             
-        
             tris.Add(a);
             tris.Add(b);
             tris.Add(c);
@@ -266,69 +266,67 @@ namespace Code.Scripts
         {
             GameObject v = Instantiate(tinySphere, originalObject.transform);
             v.transform.localPosition = vertex;
-
-            float x = ((Mathf.Pow(vertex.x, 3)) + (float) Math.Round(vertex.y, 1)) *  (int) Math.Truncate(vertex.z * 100);
-            if (vertex.x < 0)
-            {
-                x *= -1;
-            }
-            int y;
-
-            //Mathf.Abs(x);
-            if (x < 1 && x > -1)
-            {
-                x *= 1000;
-                x = (float) Math.Truncate(x);
-                Mathf.Floor(x);
-                if (x >= 100 || x <=-100 )
-                {
-                    x /= 10;
-                    x = Mathf.Round(x);
-                }
-                v.name = x.ToString();
-            }
-            else
-            {
-                y = (int) Math.Truncate(x);
-                Debug.Log(y);
-                Mathf.Floor(y);
-                if (y >= 100 || y <=-100 )
-                {
-                    y /= 10;
-                    y = (int) Mathf.Round(y);
-                }
-                v.name = y.ToString();
-            }
-
-            n++;
+            v.name = GetHash(vertex).ToString();
         }
 
-        private int AddVertex(Vector3 vertex, List<Vector3> verts, bool split)
+        private int GetHash(Vector3 vertex)
         {
-            float threshold = split ? 0.01f : 0.0001f;
-            // Search through existing vertices
-            for (int i = 0; i < verts.Count; i++)
-            {
-                // Check if the vertex is "close enough" to an existing vertex
-                if (Vector3.Distance(vertex, verts[i]) < threshold)
-                {
-                    return i; // Return the index of the close vertex
-                }
-            }
+            float epsilon= 1f;
+            
+            int x = Mathf.RoundToInt((vertex.x*100) / epsilon);
+            int y = Mathf.RoundToInt((vertex.y*100) / epsilon);
+            int z = Mathf.RoundToInt((vertex.z*100) / epsilon);
 
-            // If no close vertex is found, add the new vertex
-            int index = verts.Count;
-            verts.Add(vertex);
-            if (split)
+            return (int) (Mathf.Pow(x, 2) + y + z);
+        }
+
+        private int AddVertex(Vector3 vertex, List<Vector3> verts, Dictionary<int, Vector3> map, bool split)
+        {
+            int threshold = 2;
+
+            int hash = GetHash(vertex);
+            if (map.ContainsKey(hash))
             {
-                AddRealVertex(vertex, "Index " + index);
+                return hash;
             }
             
-            return index;
+            foreach (int key in map.Keys)
+            {
+                if (Math.Abs(Math.Abs(key) - Math.Abs(hash)) <= threshold)
+                {
+                    return hash;
+                }
+            }
+            
+            // If no close vertex is found, add the new vertex
+            map.Add(hash, vertex);
+            verts.Add(vertex);
+            
+            if (split)
+            {
+                AddRealVertex(vertex, "Index " + hash);
+            }
+            
+            return hash;
         }
 
         private void CreateMesh(List<Vector3> verts, List<int> tris, string mName)
         {
+            string v = "";
+            foreach (var VARIABLE in verts)
+            {
+                v += VARIABLE.ToString() + ", ";
+            }
+
+            string t = "";
+            foreach (var VARIABLE in tris)
+            {
+                t += VARIABLE.ToString() + ", ";
+            }
+            
+            Debug.Log(v);
+            Debug.Log(t);
+            
             Mesh mesh = new Mesh
             {
                 vertices = verts.ToArray(),
