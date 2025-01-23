@@ -28,6 +28,7 @@ namespace Code.Scripts
 
         public TextMeshProUGUI triText;
         public TextMeshProUGUI vertText;
+        public TextMeshProUGUI originalText;
 
         private void Start()
         {
@@ -50,7 +51,9 @@ namespace Code.Scripts
             // Create list to hold the triangles of pos and neg sides
             positiveTriangles = new List<int>();
             negativeTriangles = new List<int>();
-        
+
+            originalText.text = triangles.Length + " tris, " + vertices.Length + " verts.";
+
         }
 
         public void SliceMesh()
@@ -133,6 +136,12 @@ namespace Code.Scripts
                 AddTriangle(A,B,E,true,true);
                 AddTriangle(A,E,C,false,true);
             }
+            
+            // Edge case: what if two vectors lie on the z-value exactly
+            else if (Math.Abs(A.z - zValue) < tolerance &&  (Math.Abs(B.z - zValue) < tolerance || Math.Abs(C.z - zValue) < tolerance))
+            {
+                Debug.Log("YEAH");
+            }
         
             // If A and C are negative, and B is positive
             else if (!vAPositive && !vCPositive && vBPositive)
@@ -167,8 +176,11 @@ namespace Code.Scripts
                 AddTriangle(A,E,F,false, true);
             }
 
-            else
+            else if (vCPositive)
             {
+                Debug.Log("vCpositive");
+            }
+            else {
                 Debug.Log("Not sure what to put here...");
                 
             }
@@ -219,7 +231,11 @@ namespace Code.Scripts
             {
                 Debug.Log("Not a valid triangle!");
             }
-
+            else
+            {
+                
+            }
+            
             int a = AddVertex(v0, verts, split);
             int b = AddVertex(v1, verts, split);
             int c = AddVertex(v2, verts, split);
@@ -229,7 +245,7 @@ namespace Code.Scripts
             tris.Add(b);
             tris.Add(c);
 
-            string triangleName = "Triangle: (" + a + ", " + b + ", " + c + ")";
+            //string triangleName = "Triangle: (" + a + ", " + b + ", " + c + ")";
 
             if (split)
             {
@@ -288,7 +304,6 @@ namespace Code.Scripts
             meshObject.AddComponent<MeshFilter>().mesh = mesh;
             meshObject.AddComponent<MeshRenderer>().material = originalObject.GetComponent<MeshRenderer>().material;
             meshObject.transform.position = originalObject.transform.position;
-            meshObject.AddComponent<TestClass>();
         }
     }
 }
