@@ -64,16 +64,22 @@ namespace Code.Scripts
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                knifeOn = !knifeOn;
+                if (knifeOn)
+                {
+                    GameObject[] slices = Slice(circle.transform.position, circle.transform.up);
                 
-                GameObject newObject = Slice(circle.transform.position, circle.transform.up)[1];
-                Destroy(objectToSlice);
-                objectToSlice = newObject;
-                objectToSlice.name = "Object to slice";
-                objectToSlice.SetActive(true);
-              
-                HideSlicer();
-                ResetSlicer();
+                    GameObject upper = slices[0];
+                    GameObject lower = slices[1];
+
+                    upper.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position.y);
+                    lower.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position.y);
+                
+                    Destroy(objectToSlice);
+                    HideSlicer();
+                    ResetSlicer();
+                
+                    knifeOn = false;
+                }
             }
 
             if (knifeOn)

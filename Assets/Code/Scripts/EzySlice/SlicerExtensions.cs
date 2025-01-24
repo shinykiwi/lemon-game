@@ -43,15 +43,6 @@ namespace EzySlice {
             GameObject upperHull = slice.CreateUpperMesh(obj, crossSectionMaterial);
             GameObject lowerHull = slice.CreateLowerMesh(obj, crossSectionMaterial);
             
-            upperHull.AddComponent<Rigidbody>().mass = 2;
-            lowerHull.AddComponent<Rigidbody>().mass = 2;
-            
-            upperHull.AddComponent<MeshCollider>().convex = true;
-            lowerHull.AddComponent<MeshCollider>().convex = true;
-           
-            
-            upperHull.transform.Translate(Vector3.up * 0.5f);
-            lowerHull.transform.Translate(Vector3.up * 0.5f);
 
             if (upperHull != null && lowerHull != null) {
                 return new GameObject[] { upperHull, lowerHull };
