@@ -1,5 +1,9 @@
 using System.Collections;
+using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
+using Matrix4x4 = UnityEngine.Matrix4x4;
+using Vector3 = UnityEngine.Vector3;
 
 namespace EzySlice {
     /**
@@ -40,9 +44,12 @@ namespace EzySlice {
             GameObject lowerHull = slice.CreateLowerMesh(obj, crossSectionMaterial);
             
             upperHull.AddComponent<Rigidbody>();
+            upperHull.AddComponent<MeshCollider>().convex = true;
+            lowerHull.AddComponent<MeshCollider>().convex = true;
             lowerHull.AddComponent<Rigidbody>();
-
             
+            upperHull.transform.Translate(Vector3.up * 0.5f);
+            lowerHull.transform.Translate(Vector3.up * 0.5f);
 
             if (upperHull != null && lowerHull != null) {
                 return new GameObject[] { upperHull, lowerHull };

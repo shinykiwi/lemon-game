@@ -51,7 +51,7 @@ namespace Code.Scripts
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 knifeOn = !knifeOn;
-                Slice(circle.transform.position, circle.transform.up);
+                objectToSlice = Slice(circle.transform.position, circle.transform.up)[0];
                 objectToSlice.SetActive(false);
                 //circle.SetActive(false);
             }
