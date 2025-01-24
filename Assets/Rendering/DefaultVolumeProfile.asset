@@ -114,6 +114,22 @@ MonoBehaviour:
   cropToFit:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &-5874014638106086513
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81180773991d8724ab7f2d216912b564, type: 3}
+  m_Name: ChromaticAberration
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &-5675729219068302660
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -275,7 +291,6 @@ MonoBehaviour:
   m_Name: DefaultVolumeProfile
   m_EditorClassIdentifier: 
   components:
-  - {fileID: 4037840322160944193}
   - {fileID: -8908539101718709399}
   - {fileID: -9205519689070488721}
   - {fileID: 560986096833627761}
@@ -294,6 +309,7 @@ MonoBehaviour:
   - {fileID: 5381836688584115745}
   - {fileID: 3094468531514715868}
   - {fileID: -3342292269039879751}
+  - {fileID: -5874014638106086513}
 --- !u!114 &284001176461042513
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -595,22 +611,6 @@ MonoBehaviour:
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
---- !u!114 &4037840322160944193
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81180773991d8724ab7f2d216912b564, type: 3}
-  m_Name: ChromaticAberration
-  m_EditorClassIdentifier: 
-  active: 1
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0
 --- !u!114 &4929245404714387764
 MonoBehaviour:
   m_ObjectHideFlags: 3

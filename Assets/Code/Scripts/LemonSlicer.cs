@@ -1,6 +1,8 @@
+using System.Numerics;
 using EzySlice;
 using TMPro;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Code.Scripts
 {
@@ -43,6 +45,18 @@ namespace Code.Scripts
             return objectToSlice.SliceInstantiate(planeWorldPosition, planeWorldDirection);
         }
 
+        private void HideSlicer()
+        {
+            circle.SetActive(false);
+           
+        }
+
+        private void ResetSlicer()
+        {
+            circle.transform.SetParent(objectToSlice.transform);
+            circle.transform.localPosition = Vector3.zero;
+        }
+
         /// <summary>
         /// Moves the slicing guide circle back and forth (sine).
         /// </summary>
@@ -51,9 +65,15 @@ namespace Code.Scripts
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 knifeOn = !knifeOn;
-                objectToSlice = Slice(circle.transform.position, circle.transform.up)[0];
-                objectToSlice.SetActive(false);
-                //circle.SetActive(false);
+                
+                GameObject newObject = Slice(circle.transform.position, circle.transform.up)[1];
+                Destroy(objectToSlice);
+                objectToSlice = newObject;
+                objectToSlice.name = "Object to slice";
+                objectToSlice.SetActive(true);
+              
+                HideSlicer();
+                ResetSlicer();
             }
 
             if (knifeOn)
