@@ -88,19 +88,7 @@ namespace EzySlice {
             // Find index of the material for the slice section.
             // Defaults to the end of the array.
             int sliceIndex = materials.Length;
-
-            // for cases where the sliced material is null, we will append the cross section to the end
-            // of the submesh array, this is because the application may want to set/change the material
-            // after slicing has occured, so we don't assume anything
-            if (sliceMaterial != null) {
-                for (int i = 0; i < sliceIndex; i++) {
-                    if (materials[i] == sliceMaterial) {
-                        sliceIndex = i;
-                        break;
-                    }
-                }
-            }
-
+            
             return Slice(mesh, pl, sliceRegion, sliceIndex);
         }
 
@@ -113,6 +101,8 @@ namespace EzySlice {
          * a valid mesh to cut.
          */
         public static SlicedMesh Slice(Mesh meshToCut, Plane pl, TextureRegion region, int crossIndex) {
+            
+            // If there's no mesh to cut then return null
             if (meshToCut == null) {
                 return null;
             }
@@ -124,7 +114,7 @@ namespace EzySlice {
             Vector4[] tan = meshToCut.tangents;
 
             // each submesh will be sliced and placed in its own array structure
-            SlicedSubmesh slice = new SlicedSubmesh();
+            SlicedSubmesh mesh = new SlicedSubmesh();
             // the cross section hull is common across all submeshes
             List<Vector3> crossHull = new List<Vector3>();
 
@@ -140,7 +130,7 @@ namespace EzySlice {
             int[] indices = meshToCut.GetTriangles(0);
             int indicesCount = indices.Length;
 
-            SlicedSubmesh mesh = new SlicedSubmesh();
+            
 
             // loop through all the mesh vertices, generating upper and lower hulls
             // and all intersection points
@@ -214,19 +204,13 @@ namespace EzySlice {
                     }
                 }
             }
-
-            // register into the index
-            slice = mesh;
-           
             
-         
-                // check if at least one of the submeshes was sliced. If so, stop checking
-                // because we need to go through the generation step
-                if (slice != null && slice.isValid) {
-                    return CreateFrom(slice, CreateFrom(crossHull, pl.normal, region), crossIndex);
-                }
+            // Generation step
+            if (mesh != null && mesh.isValid) {
+                return CreateFrom(mesh, CreateFrom(crossHull, pl.normal, region), crossIndex);
+            }
 
-            // no slicing occured, just return null to signify
+            // No slicing occured, just return null to signify
             return null;
         }
 
@@ -235,30 +219,24 @@ namespace EzySlice {
          */
         private static SlicedMesh CreateFrom(SlicedSubmesh mesh, List<Triangle> cross, int crossSectionIndex) {
 
-            int upperHullCount = 0;
-            int lowerHullCount = 0;
-            
-            upperHullCount += mesh.upperMesh.Count;
-            lowerHullCount += mesh.lowerMesh.Count;
-
-            Mesh upperHull = CreateUpperHull(mesh, upperHullCount, cross, crossSectionIndex);
-            Mesh lowerHull = CreateLowerHull(mesh, lowerHullCount, cross, crossSectionIndex);
+            Mesh upperHull = CreateUpperMesh(mesh, mesh.upperMesh.Count, cross, crossSectionIndex);
+            Mesh lowerHull = CreateLowerMesh(mesh, mesh.lowerMesh.Count, cross, crossSectionIndex);
 
             return new SlicedMesh(upperHull, lowerHull);
         }
 
-        private static Mesh CreateUpperHull(SlicedSubmesh mesh, int total, List<Triangle> crossSection, int crossSectionIndex) {
-            return CreateHull(mesh, total, crossSection, crossSectionIndex, true);
+        private static Mesh CreateUpperMesh(SlicedSubmesh mesh, int total, List<Triangle> crossSection, int crossSectionIndex) {
+            return CreateMesh(mesh, total, crossSection, crossSectionIndex, true);
         }
 
-        private static Mesh CreateLowerHull(SlicedSubmesh mesh, int total, List<Triangle> crossSection, int crossSectionIndex) {
-            return CreateHull(mesh, total, crossSection, crossSectionIndex, false);
+        private static Mesh CreateLowerMesh(SlicedSubmesh mesh, int total, List<Triangle> crossSection, int crossSectionIndex) {
+            return CreateMesh(mesh, total, crossSection, crossSectionIndex, false);
         }
 
         /**
          * Generate a single Mesh HULL of either the UPPER or LOWER hulls. 
          */
-        private static Mesh CreateHull(SlicedSubmesh mesh, int total, List<Triangle> crossSection, int crossIndex, bool isUpper) {
+        private static Mesh CreateMesh(SlicedSubmesh mesh, int total, List<Triangle> crossSection, int crossIndex, bool isUpper) {
             if (total <= 0) {
                 return null;
             }

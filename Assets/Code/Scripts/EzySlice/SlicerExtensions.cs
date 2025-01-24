@@ -38,6 +38,11 @@ namespace EzySlice {
 
             GameObject upperHull = slice.CreateUpperMesh(obj, crossSectionMaterial);
             GameObject lowerHull = slice.CreateLowerMesh(obj, crossSectionMaterial);
+            
+            upperHull.AddComponent<Rigidbody>();
+            lowerHull.AddComponent<Rigidbody>();
+
+            
 
             if (upperHull != null && lowerHull != null) {
                 return new GameObject[] { upperHull, lowerHull };

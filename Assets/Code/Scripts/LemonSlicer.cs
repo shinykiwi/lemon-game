@@ -1,3 +1,4 @@
+using EzySlice;
 using TMPro;
 using UnityEngine;
 
@@ -16,6 +17,9 @@ namespace Code.Scripts
         [SerializeField] private float limit = 0.5f;
         [SerializeField] private float speed = 1;
         [SerializeField] private float scaleFactor = 2f;
+
+        [Header("Slicing")]
+        [SerializeField] GameObject objectToSlice;
     
         // For controlling the movement of the slice
         private float x = 0;
@@ -34,6 +38,10 @@ namespace Code.Scripts
         {
             MoveSlicer();
         }
+        
+        public GameObject[] Slice(Vector3 planeWorldPosition, Vector3 planeWorldDirection) {
+            return objectToSlice.SliceInstantiate(planeWorldPosition, planeWorldDirection);
+        }
 
         /// <summary>
         /// Moves the slicing guide circle back and forth (sine).
@@ -43,6 +51,9 @@ namespace Code.Scripts
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 knifeOn = !knifeOn;
+                Slice(circle.transform.position, circle.transform.up);
+                objectToSlice.SetActive(false);
+                //circle.SetActive(false);
             }
 
             if (knifeOn)

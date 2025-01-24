@@ -12,6 +12,7 @@ namespace EzySlice {
         private Mesh upperMesh;
         private Mesh lowerMesh;
 
+        // Constructor
         public SlicedMesh(Mesh upperMesh, Mesh lowerMesh) {
             this.upperMesh = upperMesh;
             this.lowerMesh = lowerMesh;
