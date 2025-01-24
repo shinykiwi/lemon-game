@@ -12,6 +12,8 @@ namespace Code
         private void Start()
         {
             Slice(slicer.transform.position, slicer.transform.up);
+            objectToSlice.SetActive(false);
+            slicer.SetActive(false);
         }
 
         /**

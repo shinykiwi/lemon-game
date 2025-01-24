@@ -14,56 +14,56 @@ namespace EzySlice {
     public sealed class IntersectionResult {
 
         // general tag to check if this structure is valid
-        private bool is_success;
+        private bool isSuccess;
 
         // our intersection points/triangles
-        private readonly Triangle[] upper_hull;
-        private readonly Triangle[] lower_hull;
-        private readonly Vector3[] intersection_pt;
+        private readonly Triangle[] upperMesh;
+        private readonly Triangle[] lowerMesh;
+        private readonly Vector3[] intersectionPoint;
 
         // our counters. We use raw arrays for performance reasons
-        private int upper_hull_count;
-        private int lower_hull_count;
-        private int intersection_pt_count;
+        private int upperMeshCount;
+        private int lowerMeshCount;
+        private int intersectionPtCount;
 
         public IntersectionResult() {
-            this.is_success = false;
+            this.isSuccess = false;
 
-            this.upper_hull = new Triangle[2];
-            this.lower_hull = new Triangle[2];
-            this.intersection_pt = new Vector3[2];
+            this.upperMesh = new Triangle[2];
+            this.lowerMesh = new Triangle[2];
+            this.intersectionPoint = new Vector3[2];
 
-            this.upper_hull_count = 0;
-            this.lower_hull_count = 0;
-            this.intersection_pt_count = 0;
+            this.upperMeshCount = 0;
+            this.lowerMeshCount = 0;
+            this.intersectionPtCount = 0;
         }
 
-        public Triangle[] upperHull {
-            get { return upper_hull; }
+        public Triangle[] UpperMesh {
+            get { return upperMesh; }
         }
 
-        public Triangle[] lowerHull {
-            get { return lower_hull; }
+        public Triangle[] LowerMesh {
+            get { return lowerMesh; }
         }
 
         public Vector3[] intersectionPoints {
-            get { return intersection_pt; }
+            get { return intersectionPoint; }
         }
 
-        public int upperHullCount {
-            get { return upper_hull_count; }
+        public int UpperMeshCount {
+            get { return upperMeshCount; }
         }
 
-        public int lowerHullCount {
-            get { return lower_hull_count; }
+        public int LowerMeshCount {
+            get { return lowerMeshCount; }
         }
 
         public int intersectionPointCount {
-            get { return intersection_pt_count; }
+            get { return intersectionPtCount; }
         }
 
         public bool isValid {
-            get { return is_success; }
+            get { return isSuccess; }
         }
 
         /**
@@ -71,9 +71,9 @@ namespace EzySlice {
          * upper hull section
          */
         public IntersectionResult AddUpperHull(Triangle tri) {
-            upper_hull[upper_hull_count++] = tri;
+            upperMesh[upperMeshCount++] = tri;
 
-            is_success = true;
+            isSuccess = true;
 
             return this;
         }
@@ -83,9 +83,9 @@ namespace EzySlice {
          * lower gull section
          */
         public IntersectionResult AddLowerHull(Triangle tri) {
-            lower_hull[lower_hull_count++] = tri;
+            lowerMesh[lowerMeshCount++] = tri;
 
-            is_success = true;
+            isSuccess = true;
 
             return this;
         }
@@ -95,56 +95,17 @@ namespace EzySlice {
          * which is shared by both upper->lower hulls
          */
         public void AddIntersectionPoint(Vector3 pt) {
-            intersection_pt[intersection_pt_count++] = pt;
+            intersectionPoint[intersectionPtCount++] = pt;
         }
 
         /**
          * Clear the current state of this object 
          */
         public void Clear() {
-            is_success = false;
-            upper_hull_count = 0;
-            lower_hull_count = 0;
-            intersection_pt_count = 0;
-        }
-
-        /**
-         * Editor only DEBUG functionality. This should not be compiled in the final
-         * Version.
-         */
-        public void OnDebugDraw() {
-            OnDebugDraw(Color.white);
-        }
-
-        public void OnDebugDraw(Color drawColor) {
-#if UNITY_EDITOR
-
-            if (!isValid) {
-                return;
-            }
-
-            Color prevColor = Gizmos.color;
-
-            Gizmos.color = drawColor;
-
-            // draw the intersection points
-            for (int i = 0; i < intersectionPointCount; i++) {
-                Gizmos.DrawSphere(intersectionPoints[i], 0.1f);
-            }
-
-            // draw the upper hull in RED
-            for (int i = 0; i < upperHullCount; i++) {
-                upperHull[i].OnDebugDraw(Color.red);
-            }
-
-            // draw the lower hull in BLUE
-            for (int i = 0; i < lowerHullCount; i++) {
-                lowerHull[i].OnDebugDraw(Color.blue);
-            }
-
-            Gizmos.color = prevColor;
-
-#endif
+            isSuccess = false;
+            upperMeshCount = 0;
+            lowerMeshCount = 0;
+            intersectionPtCount = 0;
         }
     }
 }

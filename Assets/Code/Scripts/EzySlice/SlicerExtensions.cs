@@ -6,44 +6,6 @@ namespace EzySlice {
      * Define Extension methods for easy access to slicer functionality
      */
     public static class SlicerExtensions {
-
-        /**
-         * SlicedMesh Return functions and appropriate overrides!
-         */
-        public static SlicedMesh Slice(this GameObject obj, Plane pl, Material crossSectionMaterial = null) {
-            return Slice(obj, pl, new TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), crossSectionMaterial);
-        }
-
-        public static SlicedMesh Slice(this GameObject obj, Vector3 position, Vector3 direction, Material crossSectionMaterial = null) {
-            return Slice(obj, position, direction, new TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), crossSectionMaterial);
-        }
-
-        public static SlicedMesh Slice(this GameObject obj, Vector3 position, Vector3 direction, TextureRegion textureRegion, Material crossSectionMaterial = null) {
-            Plane cuttingPlane = new Plane();
-
-            Matrix4x4 mat = obj.transform.worldToLocalMatrix;
-            Matrix4x4 transpose = mat.transpose;
-            Matrix4x4 inv = transpose.inverse;
-
-            Vector3 refUp = inv.MultiplyVector(direction).normalized;
-            Vector3 refPt = obj.transform.InverseTransformPoint(position);
-
-            cuttingPlane.Compute(refPt, refUp);
-
-            return Slice(obj, cuttingPlane, textureRegion, crossSectionMaterial);
-        }
-
-        public static SlicedMesh Slice(this GameObject obj, Plane pl, TextureRegion textureRegion, Material crossSectionMaterial = null) {
-            return Slicer.Slice(obj, pl, textureRegion, crossSectionMaterial);
-        }
-
-        /**
-         * These functions (and overrides) will return the final indtaniated GameObjects types
-         */
-        public static GameObject[] SliceInstantiate(this GameObject obj, Plane pl) {
-            return SliceInstantiate(obj, pl, new TextureRegion(0.0f, 0.0f, 1.0f, 1.0f));
-        }
-
         public static GameObject[] SliceInstantiate(this GameObject obj, Vector3 position, Vector3 direction) {
             return SliceInstantiate(obj, position, direction, null);
         }
