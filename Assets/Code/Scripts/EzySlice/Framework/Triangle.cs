@@ -323,27 +323,6 @@ namespace EzySlice {
                 a.y * (b.x * c.z - b.z * c.x) +
                 a.z * (b.x * c.y - b.y * c.x));
         }
-
-        /**
-         * Editor only DEBUG functionality. This should not be compiled in the final
-         * Version.
-         */
-        public void OnDebugDraw() {
-            OnDebugDraw(Color.white);
-        }
-
-        public void OnDebugDraw(Color drawColor) {
-#if UNITY_EDITOR
-            Color prevColor = Gizmos.color;
-
-            Gizmos.color = drawColor;
-
-            Gizmos.DrawLine(positionA, positionB);
-            Gizmos.DrawLine(positionB, positionC);
-            Gizmos.DrawLine(positionC, positionA);
-
-            Gizmos.color = prevColor;
-#endif
-        }
+        
     }
 }
