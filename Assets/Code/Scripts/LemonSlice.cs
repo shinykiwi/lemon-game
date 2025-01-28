@@ -19,9 +19,11 @@ public class LemonSlice : Interactable
         transform.localPosition = new Vector3(0, y, 0);
         
         name = "LemonSlice";
+        MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
         
-        MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        Debug.Log("Mesh renderer is " + meshRenderer);
         meshRenderer.materials = new Material[] {meshRenderer.materials[0]};
         
+        DisableInteract();
     }
 }

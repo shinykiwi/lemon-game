@@ -41,6 +41,7 @@ namespace Code.Scripts
             
             // Find the camera
             camera = GetComponentInChildren<CinemachineCamera>();
+            camera.enabled = false;
             
             HideSlicer();
         }
@@ -63,9 +64,9 @@ namespace Code.Scripts
             return objectToSlice.SliceInstantiate(planeWorldPosition, planeWorldDirection);
         }
 
-        public void BeginSlicing()
+        public void EnterSliceMode()
         {
-            knifeOn = true;
+            camera.enabled = true;
         }
 
         private void Slice()
