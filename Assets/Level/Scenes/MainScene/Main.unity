@@ -636,6 +636,7 @@ GameObject:
   - component: {fileID: 362062487}
   - component: {fileID: 362062486}
   - component: {fileID: 362062488}
+  - component: {fileID: 362062489}
   m_Layer: 0
   m_Name: LemonSlicer
   m_TagString: Untagged
@@ -677,6 +678,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1039236520}
   - {fileID: 1662099845}
   - {fileID: 532713842}
   - {fileID: 1377002038}
@@ -701,8 +703,26 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 3.11
+  m_Radius: 2.39
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &362062489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362062485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0.6628423, a: 1}
+  outlineWidth: 5.8
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &532713839 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
@@ -713,6 +733,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
   m_PrefabInstance: {fileID: 693788730}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &532713845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532713839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3166ae5c56c249a8ac1a768baac5a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &532713846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532713839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.7856497, g: 0.03404235, b: 0.8018868, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &693788730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -788,7 +838,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 532713845}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 532713846}
   m_SourcePrefab: {fileID: 100100000, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
 --- !u!1 &961739749
 GameObject:
@@ -921,7 +977,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.39, y: 6.9191074, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -971,7 +1027,7 @@ GameObject:
   - component: {fileID: 1039236520}
   - component: {fileID: 1039236519}
   m_Layer: 0
-  m_Name: CinemachineCamera
+  m_Name: LemonSlicerCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1029,11 +1085,11 @@ Transform:
   m_GameObject: {fileID: 1039236518}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40321448, y: -0.5792685, z: 0.39901403, w: 0.5853665}
-  m_LocalPosition: {x: 1.25, y: 6.67, z: 0.11}
+  m_LocalPosition: {x: 1.25, y: 2.3109999, z: 0.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 362062487}
   m_LocalEulerAnglesHint: {x: 69.12, y: -89.4, z: 0}
 --- !u!1 &1046778827
 GameObject:
@@ -1260,7 +1316,7 @@ GameObject:
   - component: {fileID: 1377002040}
   - component: {fileID: 1377002039}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: SlicerPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1276,7 +1332,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.707085, y: 0.0055535417, z: -0.0055535417, w: 0.707085}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.14, y: 0.14, z: 0.14}
+  m_LocalScale: {x: 0.14, y: 0.14000003, z: 0.14000003}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 362062487}
@@ -1556,7 +1612,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761249460253638187}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.39, y: 0.82, z: 0}
   m_LocalScale: {x: 3.24, y: 4.4357142, z: 3.24}
   m_ConstrainProportionsScale: 1
@@ -1564,7 +1620,7 @@ Transform:
   - {fileID: 6235000830906451831}
   - {fileID: 2683342543881284158}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1761249460253638177
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1702,7 +1758,8 @@ GameObject:
   - component: {fileID: 8399591906362774747}
   - component: {fileID: 2656956799287222871}
   - component: {fileID: 1761249460253638183}
-  m_Layer: 8
+  - component: {fileID: 8399591906362774748}
+  m_Layer: 2
   m_Name: PlayerCapsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1822,7 +1879,7 @@ GameObject:
   - component: {fileID: 2683342543881284145}
   - component: {fileID: 2683342543881284144}
   - component: {fileID: 2683342543881284159}
-  m_Layer: 8
+  m_Layer: 2
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1932,7 +1989,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4143384656027381244}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -10.39, y: 6.9191074, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2086,7 +2143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6235000830906451831}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PlayerCameraRoot
   m_TagString: CinemachineTarget
   m_Icon: {fileID: 0}
@@ -2171,13 +2228,24 @@ MonoBehaviour:
     m_Bits: 0
   canPush: 0
   strength: 1.1
+--- !u!114 &8399591906362774748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761249460253638187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5475822dda34dc494167fb9acf54d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 961739753}
   - {fileID: 203844589}
-  - {fileID: 1039236520}
   - {fileID: 4143384656027380739}
   - {fileID: 1046778831}
   - {fileID: 1197016486}

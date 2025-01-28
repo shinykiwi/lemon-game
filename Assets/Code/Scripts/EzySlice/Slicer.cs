@@ -73,9 +73,6 @@ namespace EzySlice {
             
             // ... At this point, a mesh renderer and mesh filter have been found.
 
-            // Get the materials for all submeshes
-            Material[] materials = renderer.sharedMaterials;
-
             // Get the mesh associated with the MeshFilter
             Mesh mesh = filter.sharedMesh;
 
@@ -86,8 +83,7 @@ namespace EzySlice {
             }
 
             // Find index of the material for the slice section.
-            // Defaults to the end of the array.
-            int sliceIndex = materials.Length;
+            int sliceIndex = 0;
             
             return Slice(mesh, pl, sliceRegion, sliceIndex);
         }

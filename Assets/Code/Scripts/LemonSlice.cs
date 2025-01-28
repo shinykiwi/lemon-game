@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class LemonSlice : MonoBehaviour
+public class LemonSlice : Interactable
 {
     private MeshCollider meshCollider;
     private Rigidbody rigidbody;
@@ -19,5 +19,9 @@ public class LemonSlice : MonoBehaviour
         transform.localPosition = new Vector3(0, y, 0);
         
         name = "LemonSlice";
+        
+        MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        meshRenderer.materials = new Material[] {meshRenderer.materials[0]};
+        
     }
 }
