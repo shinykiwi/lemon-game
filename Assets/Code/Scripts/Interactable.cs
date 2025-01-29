@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -16,8 +17,18 @@ public class Interactable : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        outline = gameObject.GetComponent<Outline>();
         meshRenderer = gameObject.GetComponent<MeshRenderer>();
+        outline = gameObject.GetComponent<Outline>();
+
+        if (!outline)
+        {
+            outline = gameObject.GetComponentInChildren<Outline>();
+        }
+        
+        if (!outline)
+        {
+            AddOutline();
+        }
         
         HideOutline();
     }
@@ -45,16 +56,22 @@ public class Interactable : MonoBehaviour
     /// </summary>
     public void HideOutline()
     {
-       //if (meshRenderer && outline) 
+       if (outline) 
            outline.enabled = false;
        
     }
 
+    /// <summary>
+    /// Deletes the outline entirely from the object.
+    /// </summary>
     public void RemoveOutline()
     {
         Destroy(outline);
     }
 
+    /// <summary>
+    /// Adds an outline if there isn't one already.
+    /// </summary>
     public void AddOutline()
     {
         if (outline == null)
@@ -62,24 +79,34 @@ public class Interactable : MonoBehaviour
             outline = gameObject.AddComponent<Outline>(); 
         }
     }
-
+    
     public void ToggleInteract()
     {
         canInteract = !canInteract;
         ToggleOutline();
     }
 
+    /// <summary>
+    /// Disables interaction for the object and hides the outline.
+    /// </summary>
     public void DisableInteract()
     {
         canInteract = false;
         HideOutline();
     }
 
+    /// <summary>
+    /// Enables interaction for the object.
+    /// </summary>
     public void EnableInteract()
     {
         canInteract = true;
     }
 
+    /// <summary>
+    /// Whether one can interact with the object or not.
+    /// </summary>
+    /// <returns></returns>
     public bool CanInteract()
     {
         return canInteract;

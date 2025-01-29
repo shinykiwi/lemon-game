@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using EzySlice;
 using TMPro;
@@ -22,7 +24,9 @@ namespace Code.Scripts
         [SerializeField] private float scaleFactor = 2f;
 
         [Header("Slicing")]
-        [SerializeField] GameObject objectToSlice;
+        [SerializeField] private GameObject objectToSlice;
+
+        [SerializeField] private Transform objectSpawn;
     
         // For controlling the movement of the slice
         private float x = 0;
@@ -43,6 +47,8 @@ namespace Code.Scripts
             camera = GetComponentInChildren<CinemachineCamera>();
             camera.enabled = false;
             
+            Debug.Log(camera);
+            
             HideSlicer();
         }
 
@@ -53,7 +59,8 @@ namespace Code.Scripts
                 ShowSlicer();
                 MoveSlicer();
 
-                if (Input.anyKeyDown)
+                // Left click to slice
+                if (Input.GetMouseButtonDown(0))
                 { 
                     Slice();
                 }
@@ -66,7 +73,28 @@ namespace Code.Scripts
 
         public void EnterSliceMode()
         {
-            camera.enabled = true;
+            Debug.Log(objectToSlice.name);
+            // Only enter slice mode if there is an object to slice there
+            if (objectToSlice)
+            {
+                DisableInteract();
+                camera.enabled = true;
+                knifeOn = true;
+                FindFirstObjectByType<ReticleController>().HideReticle();
+            }
+        }
+
+        private void ExitSliceMode()
+        {
+            EnableInteract();
+            camera.enabled = false;
+            knifeOn = false;
+            FindFirstObjectByType<ReticleController>().ShowReticle();
+        }
+
+        public Transform GetObjectSpawn()
+        {
+            return objectSpawn;
         }
 
         private void Slice()
@@ -79,13 +107,21 @@ namespace Code.Scripts
             
             upper.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position.y);
             lower.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position.y);
-                
-            Destroy(objectToSlice);
-            ResetSlicer();
+            
             HideSlicer();
 
-            knifeOn = false;
+            ExitSliceMode();
 
+            StartCoroutine(DestroyOriginal(objectToSlice));
+
+        }
+
+        private IEnumerator DestroyOriginal(GameObject original)
+        {
+            yield return null;
+            
+            Destroy(original);
+            
         }
 
         private void HideSlicer()
@@ -97,12 +133,6 @@ namespace Code.Scripts
         private void ShowSlicer()
         {
             circle.SetActive(true);
-        }
-
-        private void ResetSlicer()
-        {
-            //circle.transform.SetParent(objectToSlice.transform);
-            circle.transform.localPosition = Vector3.zero;
         }
 
         /// <summary>
@@ -126,6 +156,11 @@ namespace Code.Scripts
                 zText.text = y.ToString("0.000");
                 scaleText.text = scale.ToString("0.000");
             }
+        }
+
+        public void SetObjectToCut(Interactable interactable)
+        {
+            objectToSlice = interactable.gameObject;
         }
     }
 }

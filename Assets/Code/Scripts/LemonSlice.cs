@@ -13,17 +13,14 @@ public class LemonSlice : Interactable
         meshCollider = gameObject.AddComponent<MeshCollider>();
         rigidbody = gameObject.AddComponent<Rigidbody>();
 
-        rigidbody.mass = 2;
+        rigidbody.linearDamping = 3f;
+        rigidbody.angularDamping = 2f;
         meshCollider.convex = true;
         
         transform.localPosition = new Vector3(0, y, 0);
         
         name = "LemonSlice";
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-        
-        Debug.Log("Mesh renderer is " + meshRenderer);
         meshRenderer.materials = new Material[] {meshRenderer.materials[0]};
-        
-        DisableInteract();
     }
 }
