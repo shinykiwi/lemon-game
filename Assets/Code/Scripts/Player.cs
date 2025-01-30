@@ -3,6 +3,7 @@ using System.Collections;
 using Code.Scripts;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -115,58 +116,7 @@ public class Player : MonoBehaviour
 
                     // Keep it for later
                     lastInteractable = interactable;
-                    
-                    // Only continue if there's no item in your hand already
-                    if (!itemInHand)
-                    {
-                        // Right click
-                        if (Input.GetMouseButtonDown(1))
-                        {
-                            // If it's a lemon, pick it up
-                            if (interactable.GetComponent<LemonSlice>() is { } lemonSlice)
-                            {
-                                AddToHand(lemonSlice);
-                            }
-
-                            if (interactable.GetComponent<LemonSlicer>() is { } lemonSlicer)
-                            {
-                                lemonSlicer.EnterSliceMode();
-                                
-                            }
-                        }
-                    }
-                    
-                    // If you do have something in your hand
-                    else
-                    {
-                       //Debug.Log("I HAVE SMTH IN MY HAND");
-                       
-                        // Then you right click
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            Debug.Log("Clicking with something in my hand!");
-                            
-                            // If you're aiming at the lemon slicer
-                            if (interactable.GetComponent<LemonSlicer>() is { } lemonSlicer)
-                            {
-                                Debug.Log("Aiming at lemon slicer!");
-                                
-                                // If the item you're holding is a lemon
-                                if (itemInHand as LemonSlice)
-                                {
-                                    SnapToCuttingBoard(itemInHand, lemonSlicer);
-                                    
-                                }
-                            }
-                        }
-                        
-                    }
                 }
-                else
-                {
-                    //Debug.Log("can't interact");
-                }
-                
             }
             else
             {
@@ -177,40 +127,61 @@ public class Player : MonoBehaviour
         {
             if (lastInteractable) lastInteractable.HideOutline();
             
+        }
+    }
+    
+    public void OnThrow(InputValue value)
+    {
+        // If you have an item in your hand then throw
+        if (itemInHand)
+        {
+            // If you're aiming at the lemon slicer
+            if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
+            {
+                // If the item you're holding is a lemon
+                if (itemInHand as LemonSlice)
+                {
+                    SnapToCuttingBoard(itemInHand, lemonSlicer);
+                                    
+                }
+            }
             
+            // You're not aiming at lemon slicer
+            else
+            {
+                // Throw whatever object is in your hand
+                throwController.ThrowObject(itemInHand);
+                itemInHand = null;
+            }
+        }
+    }
+
+    public void OnInteract(InputValue value)
+    {
+        // Only continue if there's no item in your hand already
+        if (!itemInHand)
+        {
+            // If it's a lemon, pick it up
+            if (lastInteractable.GetComponent<LemonSlice>() is { } lemonSlice)
+            {
+                AddToHand(lemonSlice);
+            }
             
+            else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
+            {
+                lemonSlicer.EnterSliceMode();
+                            
+            }
+        }
+        else
+        {
+            DropFromHand();
         }
     }
 
     private void Update()
     {
-
-        if (itemInHand != null)
-        {
-            t1.text = itemInHand.name;
-        }
-        else
-        {
-            t1.text = null;
-        }
-        
-        
-        if (itemInHand)
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                DropFromHand();
-            }
-            
-            else if (Input.GetMouseButtonDown(0))
-            {
-                throwController.ThrowObject(itemInHand);
-                itemInHand = null;
-            }
-        }
-        
         SearchByRaycast();
-
         
     }
 }
