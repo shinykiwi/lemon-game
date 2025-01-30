@@ -17,13 +17,16 @@ public class Player : MonoBehaviour
     private Interactable itemInHand = null;
     private ReticleController reticleController;
     private Throw throwController;
+    private PlayerAudio playerAudio;
 
     [SerializeField] private Transform hand;
 
     private void Start()
     {
         reticleController = GetComponentInChildren<ReticleController>();
+        playerAudio = GetComponentInChildren<PlayerAudio>();
         throwController = gameObject.AddComponent<Throw>();
+        
     }
 
     /// <summary>
@@ -142,6 +145,7 @@ public class Player : MonoBehaviour
                 if (itemInHand as LemonSlice)
                 {
                     SnapToCuttingBoard(itemInHand, lemonSlicer);
+                    playerAudio.PutBack();
                                     
                 }
             }
@@ -152,30 +156,35 @@ public class Player : MonoBehaviour
                 // Throw whatever object is in your hand
                 throwController.ThrowObject(itemInHand);
                 itemInHand = null;
+                // woosh sound?
             }
         }
     }
 
     public void OnInteract(InputValue value)
     {
-        // Only continue if there's no item in your hand already
+        // Only continue if there's no item in your hand
         if (!itemInHand)
         {
-            // If it's a lemon, pick it up
+            // If you're looking at a lemon, pick it up
             if (lastInteractable.GetComponent<LemonSlice>() is { } lemonSlice)
             {
                 AddToHand(lemonSlice);
+                playerAudio.PickUp();
             }
             
+            // If you're looking at a cutting board, place the item on the cutting board
             else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
             {
                 lemonSlicer.EnterSliceMode();
                             
             }
         }
+        // You have something in your hand
         else
         {
             DropFromHand();
+            playerAudio.PutBack();
         }
     }
 
