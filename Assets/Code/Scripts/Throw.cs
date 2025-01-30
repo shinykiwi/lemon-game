@@ -19,5 +19,7 @@ public class Throw : MonoBehaviour
         rigidbody.isKinematic = false;
         
         rigidbody.AddForce(interactable.gameObject.transform.right * 100, ForceMode.Impulse);
+        
+        interactable.EnableInteract();
     }
 }

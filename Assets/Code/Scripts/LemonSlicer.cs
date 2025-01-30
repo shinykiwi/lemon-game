@@ -92,10 +92,10 @@ namespace Code.Scripts
         /// </summary>
         public void EnterSliceMode()
         {
-            Debug.Log(objectToSlice.name);
             // Only enter slice mode if there is an object to slice there
             if (objectToSlice)
             {
+                Debug.Log(objectToSlice.name);
                 DisableInteract();
                 camera.enabled = true;
                 knifeOn = true;

@@ -1,10 +1,16 @@
 using System;
 using System.Collections;
 using Code.Scripts;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Debug")] 
+    public TextMeshProUGUI t1;
+    public TextMeshProUGUI t2;
+    public TextMeshProUGUI t3;
+    
     private Interactable lastInteractable;
     bool currentlySlicing = false;
     private Interactable itemInHand = null;
@@ -133,7 +139,6 @@ public class Player : MonoBehaviour
                     // If you do have something in your hand
                     else
                     {
-                        
                        //Debug.Log("I HAVE SMTH IN MY HAND");
                        
                         // Then you right click
@@ -172,20 +177,35 @@ public class Player : MonoBehaviour
         {
             if (lastInteractable) lastInteractable.HideOutline();
             
+            
+            
         }
     }
 
     private void Update()
     {
+
+        if (itemInHand != null)
+        {
+            t1.text = itemInHand.name;
+        }
+        else
+        {
+            t1.text = null;
+        }
+        
+        
         if (itemInHand)
         {
             if (Input.GetMouseButtonDown(1))
             {
                 DropFromHand();
             }
+            
             else if (Input.GetMouseButtonDown(0))
             {
                 throwController.ThrowObject(itemInHand);
+                itemInHand = null;
             }
         }
         
