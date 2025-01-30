@@ -25,7 +25,7 @@ namespace Code.Scripts
 
         [Header("Slicing")]
         [SerializeField] private GameObject objectToSlice;
-
+        [SerializeField] private Knife knife;
         [SerializeField] private Transform objectSpawn;
     
         // For controlling the movement of the slice
@@ -47,13 +47,12 @@ namespace Code.Scripts
             camera = GetComponentInChildren<CinemachineCamera>();
             camera.enabled = false;
             
-            Debug.Log(camera);
-            
             HideSlicer();
         }
 
         void Update()
         {
+            // If the knife is on, allow slicing operations
             if (knifeOn)
             {
                 ShowSlicer();
@@ -62,15 +61,35 @@ namespace Code.Scripts
                 // Left click to slice
                 if (Input.GetMouseButtonDown(0))
                 { 
+                    KnifeCutSequence();
                     Slice();
                 }
             }
         }
         
+        /// <summary>
+        /// Gets the location where objects will be spawned onto the cutting board.
+        /// </summary>
+        /// <returns></returns>
+        public Transform GetObjectSpawn()
+        {
+            return objectSpawn;
+        }
+        
+        /// <summary>
+        /// Performs the slicing mesh operation.
+        /// </summary>
+        /// <param name="planeWorldPosition"></param>
+        /// <param name="planeWorldDirection"></param>
+        /// <returns></returns>
         public GameObject[] SliceMesh(Vector3 planeWorldPosition, Vector3 planeWorldDirection) {
             return objectToSlice.SliceInstantiate(planeWorldPosition, planeWorldDirection);
         }
+        
 
+        /// <summary>
+        /// Changes to the slicing view and enables slicing. Hides reticle.
+        /// </summary>
         public void EnterSliceMode()
         {
             Debug.Log(objectToSlice.name);
@@ -83,7 +102,11 @@ namespace Code.Scripts
                 FindFirstObjectByType<ReticleController>().HideReticle();
             }
         }
+        
 
+        /// <summary>
+        /// Exits the slicing view and returns to normal. Shows the reticle.
+        /// </summary>
         private void ExitSliceMode()
         {
             EnableInteract();
@@ -92,11 +115,17 @@ namespace Code.Scripts
             FindFirstObjectByType<ReticleController>().ShowReticle();
         }
 
-        public Transform GetObjectSpawn()
-        {
-            return objectSpawn;
-        }
 
+        // TODO: Finish this 
+        private void KnifeCutSequence()
+        {
+            
+        }
+        
+        
+        /// <summary>
+        /// Slices the lemon into two, adds the LemonSlice component.
+        /// </summary>
         private void Slice()
         {
             objectToSlice.GetComponent<Interactable>().RemoveOutline();
@@ -115,7 +144,13 @@ namespace Code.Scripts
             StartCoroutine(DestroyOriginal(objectToSlice));
 
         }
+        
 
+        /// <summary>
+        /// Destroys the original object after waiting until the next frame.
+        /// </summary>
+        /// <param name="original"></param>
+        /// <returns></returns>
         private IEnumerator DestroyOriginal(GameObject original)
         {
             yield return null;
@@ -123,17 +158,26 @@ namespace Code.Scripts
             Destroy(original);
             
         }
+        
 
+        /// <summary>
+        /// Hides the slicer plane (white circle).
+        /// </summary>
         private void HideSlicer()
         {
             circle.SetActive(false);
            
         }
+        
 
+        /// <summary>
+        /// Shows the slicer plane (white circle).
+        /// </summary>
         private void ShowSlicer()
         {
             circle.SetActive(true);
         }
+        
 
         /// <summary>
         /// Moves the slicing guide circle back and forth (sine).
@@ -157,10 +201,16 @@ namespace Code.Scripts
                 scaleText.text = scale.ToString("0.000");
             }
         }
+        
 
-        public void SetObjectToCut(Interactable interactable)
+        /// <summary>
+        /// Sets the active object that is on the cutting board.
+        /// </summary>
+        /// <param name="interactable"></param>
+        public void SetObjectToSlice(Interactable interactable)
         {
             objectToSlice = interactable.gameObject;
         }
+        
     }
 }

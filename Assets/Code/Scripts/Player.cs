@@ -9,12 +9,14 @@ public class Player : MonoBehaviour
     bool currentlySlicing = false;
     private Interactable itemInHand = null;
     private ReticleController reticleController;
+    private Throw throwController;
 
     [SerializeField] private Transform hand;
 
     private void Start()
     {
         reticleController = GetComponentInChildren<ReticleController>();
+        throwController = gameObject.AddComponent<Throw>();
     }
 
     /// <summary>
@@ -70,7 +72,7 @@ public class Player : MonoBehaviour
         // Turn off physics
         obj.GetComponent<Rigidbody>().isKinematic = true;
 
-        slicer.SetObjectToCut(interactable);
+        slicer.SetObjectToSlice(interactable);
 
         itemInHand = null;
     }
@@ -180,6 +182,10 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButtonDown(1))
             {
                 DropFromHand();
+            }
+            else if (Input.GetMouseButtonDown(0))
+            {
+                throwController.ThrowObject(itemInHand);
             }
         }
         

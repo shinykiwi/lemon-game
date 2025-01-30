@@ -1,9 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ReticleController : MonoBehaviour
 {
     private Canvas canvas;
+    
+    [SerializeField] private Image reticle;
+    [SerializeField] private Slider radialSlider;
 
     private void Start()
     {
@@ -12,16 +16,36 @@ public class ReticleController : MonoBehaviour
 
     public void ToggleReticle()
     {
-        canvas.enabled = !canvas.enabled;
+        reticle.enabled = !canvas.enabled;
     }
 
     public void ShowReticle()
     {
-        canvas.enabled = true;
+        reticle.enabled = true;
     }
 
     public void HideReticle()
     {
-        canvas.enabled = false;
+        reticle.enabled = false;
+    }
+
+    public void ShowRadialSlider()
+    {
+        radialSlider.gameObject.SetActive(true);
+    }
+
+    public void HideRadialSlider()
+    {
+        radialSlider.gameObject.SetActive(false);
+    }
+
+    public void SetRadialSliderValue(float value)
+    {
+        radialSlider.value = value;
+    }
+
+    public float GetRadialSliderValue()
+    {
+        return radialSlider.value;
     }
 }
