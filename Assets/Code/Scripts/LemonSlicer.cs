@@ -134,8 +134,8 @@ namespace Code.Scripts
             GameObject upper = slices[0];
             GameObject lower = slices[1];
             
-            upper.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position.y);
-            lower.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position.y);
+            upper.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position);
+            lower.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position);
             
             HideSlicer();
 

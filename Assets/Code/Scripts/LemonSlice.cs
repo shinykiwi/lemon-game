@@ -7,17 +7,17 @@ public class LemonSlice : Interactable
     private Rigidbody rigidbody;
     private GameObject gameObject;
 
-    public void Setup(float y)
+    public void Setup(Vector3 position)
     {
         gameObject = this.transform.gameObject;
         meshCollider = gameObject.AddComponent<MeshCollider>();
         rigidbody = gameObject.AddComponent<Rigidbody>();
 
-        rigidbody.linearDamping = 3f;
-        rigidbody.angularDamping = 2f;
+        //rigidbody.linearDamping = 10f;
+        //rigidbody.angularDamping = 2f;
         meshCollider.convex = true;
         
-        transform.localPosition = new Vector3(0, y, 0);
+        transform.localPosition = position;
         
         name = "LemonSlice";
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
