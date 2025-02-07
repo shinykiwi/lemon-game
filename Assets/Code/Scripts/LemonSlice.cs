@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LemonSlice : Interactable
 {
@@ -9,6 +10,8 @@ public class LemonSlice : Interactable
     private GameObject gameObject;
     private bool hasBeenSliced = false;
     private float squeeze = 0.35f;
+
+    private float juice = 10f;
 
     public void Setup(Vector3 position)
     {
@@ -33,17 +36,24 @@ public class LemonSlice : Interactable
     {
         return hasBeenSliced;
     }
-    
-    public void Squeeze()
-    {
-        transform.DOShakeScale(.5f, squeeze);
-    }
 
-    private void Update()
+    public bool CanBeSqueezed()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        return juice > 0;
+    }
+    
+    public bool Squeeze()
+    {
+        if (juice > 0)
         {
-            Squeeze();
+            transform.DOShakeScale(.5f, squeeze);
+            juice -= Random.value * 2;
+            return true;
+        }
+        else
+        {
+            transform.DOShakeRotation(.5f, squeeze);
+            return false;
         }
     }
 }

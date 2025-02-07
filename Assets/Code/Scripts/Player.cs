@@ -23,9 +23,12 @@ public class Player : MonoBehaviour
     
     private Interactable lastInteractable;
     bool currentlySlicing = false;
+    
     private Interactable itemInHand = null;
     private LemonSlice currentLemon = null;
     private LemonSlicer currentLemonSlicer = null;
+    private LemonadePitcher currentLemonadePitcher = null;
+    
     private ReticleController reticleController;
     private Throw throwController;
     private PlayerAudio playerAudio;
@@ -180,11 +183,12 @@ public class Player : MonoBehaviour
                         if (itemInHand.GetComponent<LemonSlice>() is { } lemon)
                         {
                             // If the lemon has been sliced before
-                            if (lemon.IsSliced())
+                            if (lemon.IsSliced() && lemon.CanBeSqueezed())
                             {
                                 // Enters the squeezing mode
                                 SnapToLocation(itemInHand, lemonadePitcher.EnterSqueezingMode());
                                 currentLemon = lemon;
+                                currentLemonadePitcher = lemonadePitcher;
                                 state = State.Squeezing;
                             }
                         
@@ -250,8 +254,16 @@ public class Player : MonoBehaviour
             case State.Slicing:
                 break;
             case State.Squeezing:
-                currentLemon.Squeeze();
-                playerAudio.SqueezeLemon();
+                if (currentLemon.Squeeze())
+                {
+                    playerAudio.SqueezeLemon();
+                }
+                else
+                {
+                    currentLemonadePitcher.ExitSqueezingMode();
+                    currentLemon.EnableInteract();
+                    state = State.Idle;
+                }
                 break;
             case State.Stirring:
                 break;

@@ -7,11 +7,18 @@ public class LemonadePitcher : Interactable
     [SerializeField] private CinemachineCamera camera;
     [SerializeField] private Transform lemonSpawnPoint;
     [SerializeField] private Transform woodSpoonSpawnPoint;
+
+    private float lemonJuice = 0f;
     
 
     public void EnterStirringMode()
     {
         camera.enabled = true;
+    }
+
+    public void AddLemonJuice(float juice)
+    {
+        lemonJuice += juice;
     }
    
 
@@ -28,6 +35,7 @@ public class LemonadePitcher : Interactable
     public void ExitSqueezingMode()
     {
         camera.enabled = false;
+        EnableInteract();
     }
     
     public void ExitStirringMode()
