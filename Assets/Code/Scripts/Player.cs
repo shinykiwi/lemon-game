@@ -11,7 +11,8 @@ public enum State
     Slicing,
     Squeezing,
     Sugaring,
-    Stirring
+    Stirring,
+    Pouring
 }
 public class Player : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
     private LemonSlice currentLemon = null;
     private LemonSlicer currentLemonSlicer = null;
     private LemonadePitcher currentLemonadePitcher = null;
+    private WaterPitcher currentWaterPitcher = null;
     
     private ReticleController reticleController;
     private Throw throwController;
@@ -191,9 +193,20 @@ public class Player : MonoBehaviour
                                 currentLemonadePitcher = lemonadePitcher;
                                 state = State.Squeezing;
                             }
-                        
                         }
-                
+                        
+                        // If the item you're holding is a water pitcher
+                        else if (itemInHand.GetComponent<WaterPitcher>() is { } waterPitcher)
+                        {
+                            // If the water pitcher has water in it
+                            if (waterPitcher.HasWater())
+                            {
+                                SnapToLocation(itemInHand,lemonadePitcher.EnterPouringMode());
+                                currentWaterPitcher = waterPitcher;
+                                currentLemonadePitcher = lemonadePitcher;
+                                state = State.Pouring;
+                            }
+                        }
                     }
             
                     // You're not aiming at lemon slicer
@@ -240,6 +253,15 @@ public class Player : MonoBehaviour
                         state = State.Slicing;
 
                     }
+                    
+                    // If you're looking at a water pitcher, pick it up
+                    else if (lastInteractable.GetComponent<WaterPitcher>() is { } waterPitcher)
+                    {
+                        AddToHand(waterPitcher);
+                        playerAudio.PickUp();
+                        currentWaterPitcher = waterPitcher;
+                        
+                    }
                 }
         
                 // You have something in your hand
@@ -253,6 +275,7 @@ public class Player : MonoBehaviour
             
             case State.Slicing:
                 break;
+            
             case State.Squeezing:
                 if (currentLemon.Squeeze())
                 {
@@ -265,7 +288,12 @@ public class Player : MonoBehaviour
                     state = State.Idle;
                 }
                 break;
+            
             case State.Stirring:
+                break;
+            
+            case State.Pouring:
+                currentWaterPitcher.ToggleWaterPour();
                 break;
         }
         
