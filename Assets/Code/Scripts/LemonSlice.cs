@@ -6,6 +6,7 @@ public class LemonSlice : Interactable
     private MeshCollider meshCollider;
     private Rigidbody rigidbody;
     private GameObject gameObject;
+    private bool hasBeenSliced = false;
 
     public void Setup(Vector3 position)
     {
@@ -22,5 +23,12 @@ public class LemonSlice : Interactable
         name = "LemonSlice";
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
         meshRenderer.materials = new Material[] {meshRenderer.materials[0]};
+
+        hasBeenSliced = true;
+    }
+
+    public bool IsSliced()
+    {
+        return hasBeenSliced;
     }
 }

@@ -70,21 +70,27 @@ public class Player : MonoBehaviour
 
     private void SnapToCuttingBoard(Interactable interactable, LemonSlicer slicer)
     {
+        SnapToLocation(interactable, slicer.GetObjectSpawn());
+
+        slicer.SetObjectToSlice(interactable);
+    }
+
+    private void SnapToLocation(Interactable interactable, Transform parent)
+    {
         // Disable interaction for the object
         interactable.DisableInteract();
         
         // Reset transforms
         GameObject obj;
-        (obj = interactable.gameObject).transform.SetParent(slicer.GetObjectSpawn());
+        (obj = interactable.gameObject).transform.SetParent(parent);
         obj.transform.localPosition = Vector3.zero;
         obj.transform.localRotation = Quaternion.Euler(Vector3.zero);
         
         // Turn off physics
         obj.GetComponent<Rigidbody>().isKinematic = true;
 
-        slicer.SetObjectToSlice(interactable);
-
         itemInHand = null;
+
     }
 
     private IEnumerator EnableGeneralInteraction()
@@ -133,6 +139,7 @@ public class Player : MonoBehaviour
         }
     }
     
+    // Left click
     public void OnThrow(InputValue value)
     {
         // If you have an item in your hand then throw
@@ -150,6 +157,19 @@ public class Player : MonoBehaviour
                 }
             }
             
+            // If you're aiming at the lemonade pitcher
+            else if (lastInteractable.GetComponent<LemonadePitcher>() is { } lemonadePitcher)
+            {
+                // If the item you're holding is a lemon
+                if (itemInHand.GetComponent<LemonSlice>() is { } lemon)
+                {
+                    if (lemon.IsSliced())
+                        // Enters the squeezing mode
+                        SnapToLocation(itemInHand, lemonadePitcher.EnterSqueezingMode());
+                }
+                
+            }
+            
             // You're not aiming at lemon slicer
             else
             {
@@ -161,6 +181,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Right click
     public void OnInteract(InputValue value)
     {
         // Only continue if there's no item in your hand
@@ -173,13 +194,14 @@ public class Player : MonoBehaviour
                 playerAudio.PickUp();
             }
             
-            // If you're looking at a cutting board, place the item on the cutting board
+            // If you're looking at a cutting board, enter slicing mode
             else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
             {
                 lemonSlicer.EnterSliceMode();
                             
             }
         }
+        
         // You have something in your hand
         else
         {
