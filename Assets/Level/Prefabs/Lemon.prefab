@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
+  squeeze: 1.5
 --- !u!114 &1005163364520505717
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -37,6 +37,7 @@ namespace Code.Scripts
         private Vector3 localCirclePos;
 
         private CinemachineCamera camera;
+        private PlayerAudio playerAudio;
 
         private void Start()
         {
@@ -46,6 +47,9 @@ namespace Code.Scripts
             // Find the camera
             camera = GetComponentInChildren<CinemachineCamera>();
             camera.enabled = false;
+            
+            // Find player audio object
+            playerAudio = FindFirstObjectByType<PlayerAudio>();
             
             HideSlicer();
         }
@@ -57,14 +61,14 @@ namespace Code.Scripts
             {
                 ShowSlicer();
                 MoveSlicer();
-
-                // Left click to slice
-                if (Input.GetMouseButtonDown(0))
-                { 
-                    KnifeCutSequence();
-                    Slice();
-                }
             }
+        }
+
+        public void InitiateSlice()
+        {
+            KnifeCutSequence();
+            Slice();
+            playerAudio.SliceLemon();
         }
         
         /// <summary>

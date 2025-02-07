@@ -5,8 +5,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum State
+{
+    Idle,
+    Slicing,
+    Squeezing,
+    Sugaring,
+    Stirring
+}
 public class Player : MonoBehaviour
 {
+    
     [Header("Debug")] 
     public TextMeshProUGUI t1;
     public TextMeshProUGUI t2;
@@ -15,9 +24,13 @@ public class Player : MonoBehaviour
     private Interactable lastInteractable;
     bool currentlySlicing = false;
     private Interactable itemInHand = null;
+    private LemonSlice currentLemon = null;
+    private LemonSlicer currentLemonSlicer = null;
     private ReticleController reticleController;
     private Throw throwController;
     private PlayerAudio playerAudio;
+    
+    private State state = State.Idle;
 
     [SerializeField] private Transform hand;
 
@@ -142,72 +155,108 @@ public class Player : MonoBehaviour
     // Left click
     public void OnThrow(InputValue value)
     {
-        // If you have an item in your hand then throw
-        if (itemInHand)
+        switch (state)
         {
-            // If you're aiming at the lemon slicer
-            if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
-            {
-                // If the item you're holding is a lemon
-                if (itemInHand as LemonSlice)
+            case State.Idle:
+                // If you have an item in your hand then throw
+                if (itemInHand)
                 {
-                    SnapToCuttingBoard(itemInHand, lemonSlicer);
-                    playerAudio.PutBack();
+                    // If you're aiming at the lemon slicer
+                    if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
+                    {
+                        // If the item you're holding is a lemon
+                        if (itemInHand as LemonSlice)
+                        {
+                            SnapToCuttingBoard(itemInHand, lemonSlicer);
+                            playerAudio.PutBack();
                                     
-                }
-            }
+                        }
+                    }
             
-            // If you're aiming at the lemonade pitcher
-            else if (lastInteractable.GetComponent<LemonadePitcher>() is { } lemonadePitcher)
-            {
-                // If the item you're holding is a lemon
-                if (itemInHand.GetComponent<LemonSlice>() is { } lemon)
-                {
-                    if (lemon.IsSliced())
-                        // Enters the squeezing mode
-                        SnapToLocation(itemInHand, lemonadePitcher.EnterSqueezingMode());
-                }
+                    // If you're aiming at the lemonade pitcher
+                    else if (lastInteractable.GetComponent<LemonadePitcher>() is { } lemonadePitcher)
+                    {
+                        // If the item you're holding is a lemon
+                        if (itemInHand.GetComponent<LemonSlice>() is { } lemon)
+                        {
+                            // If the lemon has been sliced before
+                            if (lemon.IsSliced())
+                            {
+                                // Enters the squeezing mode
+                                SnapToLocation(itemInHand, lemonadePitcher.EnterSqueezingMode());
+                                currentLemon = lemon;
+                                state = State.Squeezing;
+                            }
+                        
+                        }
                 
-            }
+                    }
             
-            // You're not aiming at lemon slicer
-            else
-            {
-                // Throw whatever object is in your hand
-                throwController.ThrowObject(itemInHand);
-                itemInHand = null;
-                // woosh sound?
-            }
+                    // You're not aiming at lemon slicer
+                    else
+                    {
+                        // Throw whatever object is in your hand
+                        throwController.ThrowObject(itemInHand);
+                        itemInHand = null;
+                        // woosh sound?
+                    }
+                }
+                break;
+            
+            case State.Slicing:
+                currentLemonSlicer.InitiateSlice();
+                state = State.Idle;
+                break;
         }
+        
     }
 
     // Right click
     public void OnInteract(InputValue value)
     {
-        // Only continue if there's no item in your hand
-        if (!itemInHand)
+        switch (state)
         {
-            // If you're looking at a lemon, pick it up
-            if (lastInteractable.GetComponent<LemonSlice>() is { } lemonSlice)
-            {
-                AddToHand(lemonSlice);
-                playerAudio.PickUp();
-            }
+            case State.Idle:
+                
+                // You have nothing in your hand
+                if (!itemInHand)
+                {
+                    // If you're looking at a lemon, pick it up
+                    if (lastInteractable.GetComponent<LemonSlice>() is { } lemonSlice)
+                    {
+                        AddToHand(lemonSlice);
+                        playerAudio.PickUp();
+                    }
             
-            // If you're looking at a cutting board, enter slicing mode
-            else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
-            {
-                lemonSlicer.EnterSliceMode();
-                            
-            }
+                    // If you're looking at a cutting board, enter slicing mode
+                    else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
+                    {
+                        lemonSlicer.EnterSliceMode();
+                        currentLemonSlicer = lemonSlicer;
+                        state = State.Slicing;
+
+                    }
+                }
+        
+                // You have something in your hand
+                else
+                {
+                    DropFromHand();
+                    playerAudio.PutBack();
+                }
+
+                break;
+            
+            case State.Slicing:
+                break;
+            case State.Squeezing:
+                currentLemon.Squeeze();
+                playerAudio.SqueezeLemon();
+                break;
+            case State.Stirring:
+                break;
         }
         
-        // You have something in your hand
-        else
-        {
-            DropFromHand();
-            playerAudio.PutBack();
-        }
     }
 
     private void Update()

@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 public class LemonSlice : Interactable
@@ -7,6 +8,7 @@ public class LemonSlice : Interactable
     private Rigidbody rigidbody;
     private GameObject gameObject;
     private bool hasBeenSliced = false;
+    private float squeeze = 0.35f;
 
     public void Setup(Vector3 position)
     {
@@ -30,5 +32,18 @@ public class LemonSlice : Interactable
     public bool IsSliced()
     {
         return hasBeenSliced;
+    }
+    
+    public void Squeeze()
+    {
+        transform.DOShakeScale(.5f, squeeze);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Squeeze();
+        }
     }
 }
