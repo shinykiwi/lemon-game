@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     private LemonSlicer currentLemonSlicer = null;
     private LemonadePitcher currentLemonadePitcher = null;
     private WaterPitcher currentWaterPitcher = null;
+    private SugarSpoon currentSpoon = null;
     
     private ReticleController reticleController;
     private Throw throwController;
@@ -163,7 +164,7 @@ public class Player : MonoBehaviour
         switch (state)
         {
             case State.Idle:
-                // If you have an item in your hand then throw
+                // If you have an item in your hand
                 if (itemInHand)
                 {
                     // If you're aiming at the lemon slicer
@@ -206,6 +207,39 @@ public class Player : MonoBehaviour
                                 currentLemonadePitcher = lemonadePitcher;
                                 state = State.Pouring;
                             }
+                        }
+                        
+                        // If the item you're holding is a spoon
+                        else if (itemInHand.GetComponent<SugarSpoon>() is { } sugarSpoon)
+                        {
+                            // If the spoon has sugar on it
+                            if (sugarSpoon.HasSugar())
+                            {
+                                SnapToLocation(itemInHand, lemonadePitcher.EnterSugarMode());
+                                currentSpoon = sugarSpoon; // can maybe remove
+                                currentLemonadePitcher = lemonadePitcher;
+                                state = State.Sugaring;
+                            }
+                        }
+                    }
+                    
+                    // If you're aiming at a sugar jar
+                    else if (lastInteractable.GetComponent<SugarJar>())
+                    {
+                        // If the item you're holding is a spoon
+                        if (itemInHand.GetComponent<SugarSpoon>() is { } sugarSpoon)
+                        {
+                            // Put back the sugar if there's sugar on the spoon
+                            if (sugarSpoon.HasSugar())
+                            {
+                                sugarSpoon.RemoveSugar();
+                            }
+                            // Otherwise, put sugar on the spoon
+                            else
+                            {
+                                sugarSpoon.AddSugar();
+                            }
+                            
                         }
                     }
             
@@ -261,6 +295,13 @@ public class Player : MonoBehaviour
                         playerAudio.PickUp();
                         currentWaterPitcher = waterPitcher;
                         
+                    }
+                    
+                    else if (lastInteractable.GetComponent<SugarSpoon>() is { } sugarSpoon)
+                    {
+                        AddToHand(sugarSpoon);
+                        playerAudio.PickUp();
+                        currentSpoon = sugarSpoon; // idk if this will be used
                     }
                 }
         

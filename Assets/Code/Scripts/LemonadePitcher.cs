@@ -8,6 +8,7 @@ public class LemonadePitcher : Interactable
     [SerializeField] private Transform lemonSpawnPoint;
     [SerializeField] private Transform woodSpoonSpawnPoint;
     [SerializeField] private Transform waterPitcherSpawnPoint;
+    [SerializeField] private Transform sugarSpoonSpawnPoint;
 
     private float lemonJuice = 0f;
     
@@ -38,6 +39,14 @@ public class LemonadePitcher : Interactable
 
         return waterPitcherSpawnPoint;
     }
+    
+    public Transform EnterSugarMode()
+    {
+        //camera.enabled = true;
+        DisableInteract();
+        return sugarSpoonSpawnPoint;
+    }
+    
     // ----- Exits -----
 
     public void ExitSqueezingMode()
@@ -50,5 +59,6 @@ public class LemonadePitcher : Interactable
     {
         camera.enabled = false;
     }
+
     
 }
