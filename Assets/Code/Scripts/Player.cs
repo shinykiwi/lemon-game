@@ -240,6 +240,15 @@ public class Player : MonoBehaviour
                             
                         }
                     }
+                    
+                    // If you're aiming at a trash can
+                    else if (lastInteractable.GetComponent<TrashCan>())
+                    {
+                        Debug.Log("Destroying item in hand");
+                        itemInHand.transform.SetParent(null);
+                        Destroy(itemInHand.gameObject);
+                        itemInHand = null;
+                    }
             
                     // You're not aiming at lemon slicer
                     else
