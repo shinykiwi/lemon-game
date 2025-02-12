@@ -3148,6 +3148,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1600907967}
     m_Modifications:
+    - target: {fileID: 814011024031112021, guid: fa31368585ad546b3b5b106edfb957b8, type: 3}
+      propertyPath: m_InitialEventName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 814011024031112021, guid: fa31368585ad546b3b5b106edfb957b8, type: 3}
+      propertyPath: m_InitialEventNameOverriden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 970593004586328871, guid: fa31368585ad546b3b5b106edfb957b8, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5773311515014662448, guid: fa31368585ad546b3b5b106edfb957b8, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
