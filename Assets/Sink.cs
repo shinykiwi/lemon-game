@@ -1,16 +1,24 @@
+using System;
 using UnityEngine;
+using UnityEngine.VFX;
 
-public class Sink : MonoBehaviour
+public class Sink : Interactable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // private VisualEffect vfx;
+    //
+    // private void Start()
+    // {
+    //     vfx = GetComponentInChildren<VisualEffect>();
+    // }
+    //
+    // public void TurnOnTap()
+    // {
+    //     vfx.Play();
+    // }
+    //
+    // public void TurnOffTap()
+    // {
+    //     vfx.Stop();
+    // }
 }

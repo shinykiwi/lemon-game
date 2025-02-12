@@ -65,4 +65,10 @@ public class LemonadePitcher : Interactable
     {
         camera.enabled = false;
     }
+
+    public void Exit()
+    {
+        camera.enabled = false;
+        EnableInteract();
+    }
 }

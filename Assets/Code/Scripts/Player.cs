@@ -4,6 +4,7 @@ using Code.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Splines;
 
 public enum State
 {
@@ -244,10 +245,25 @@ public class Player : MonoBehaviour
                     // If you're aiming at a trash can
                     else if (lastInteractable.GetComponent<TrashCan>())
                     {
-                        Debug.Log("Destroying item in hand");
                         itemInHand.transform.SetParent(null);
                         Destroy(itemInHand.gameObject);
                         itemInHand = null;
+                    }
+                    
+                    // If you're aiming at the sink
+                    else if (lastInteractable.GetComponent<Sink>())
+                    {
+                        // If you're holding a water pitcher
+                        if (itemInHand.GetComponent<WaterPitcher>() is { } waterPitcher)
+                        {
+                            waterPitcher.AddWater();
+                        }
+                        
+                        // // Maybe if you are holding a lemon, you can wash it?
+                        // else if (itemInHand.GetComponent<LemonSlice>())
+                        // {
+                        //     
+                        // }
                     }
             
                     // You're not aiming at lemon slicer
@@ -342,7 +358,20 @@ public class Player : MonoBehaviour
                 break;
             
             case State.Pouring:
-                currentWaterPitcher.ToggleWaterPour();
+                // If the player stops pouring and there's no more water left, exit pouring mode
+                if (!currentWaterPitcher.IsPouring() && !currentWaterPitcher.HasWater())
+                {
+                    currentLemonadePitcher.Exit();   
+                    AddToHand(currentWaterPitcher);
+                    state = State.Idle;
+                }
+                
+                // Normal pouring situation
+                else
+                {
+                    currentWaterPitcher.ToggleWaterPour();
+                }
+                
                 break;
         }
         

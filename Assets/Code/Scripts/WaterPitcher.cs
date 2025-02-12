@@ -4,13 +4,36 @@ using UnityEngine;
 
 public class WaterPitcher : Interactable
 {
-    private float water = 100f;
+    [SerializeField] private float water = 0f;
     private bool pouring = false;
     private float pouringAngle = -55;
+    private float maxWaterAmount = 100f;
 
-    public void AddWater(float w)
+    public void AddWater(float w = 25f)
     {
-        water += w;
+        // If the current water level is not at the max yet
+        if (water < maxWaterAmount)
+        {
+            // Say max water is 100. Our current water is 97. Theres still room, but not enough for +25 water
+            // Then only add the different between 100 - 97 which is 3 water. 
+            if (maxWaterAmount - water <= w)
+            {
+                water += maxWaterAmount - water;
+            }
+            
+            // Otherwise add the full amount
+            else
+            {
+                water += w;
+            }
+            
+            Debug.Log("Adding water!"+water);
+        }
+        else
+        {
+            Debug.Log("Can't add water, it's already full!");
+        }
+        
     }
 
     public float GetWaterAmount()
@@ -47,11 +70,17 @@ public class WaterPitcher : Interactable
         transform.DOLocalRotate(new Vector3(0, q.y, q.z), 0.5f);
     }
 
+    public bool IsPouring()
+    {
+        return pouring;
+    }
+
     private void Update()
     {
-        if (pouring)
+        // Only decrease water count if currently pouring and there is water to pour
+        if (pouring && water > 0 )
         {
-            water -= 0.01f;
+            water -= 0.1f;
         }
     }
 }
