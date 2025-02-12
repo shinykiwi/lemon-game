@@ -11,6 +11,7 @@ public class LemonadePitcher : Interactable
     [SerializeField] private Transform sugarSpoonSpawnPoint;
 
     private float lemonJuice = 0f;
+    private float sugar = 0f;
     
 
     public void EnterStirringMode()
@@ -21,6 +22,11 @@ public class LemonadePitcher : Interactable
     public void AddLemonJuice(float juice)
     {
         lemonJuice += juice;
+    }
+    
+    public void AddSugar(float s)
+    {
+        sugar += s;
     }
    
 
@@ -59,6 +65,4 @@ public class LemonadePitcher : Interactable
     {
         camera.enabled = false;
     }
-
-    
 }

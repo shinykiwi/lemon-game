@@ -215,10 +215,8 @@ public class Player : MonoBehaviour
                             // If the spoon has sugar on it
                             if (sugarSpoon.HasSugar())
                             {
-                                SnapToLocation(itemInHand, lemonadePitcher.EnterSugarMode());
-                                currentSpoon = sugarSpoon; // can maybe remove
-                                currentLemonadePitcher = lemonadePitcher;
-                                state = State.Sugaring;
+                                // Adds sugar amount to the lemonade pitcher
+                                currentLemonadePitcher.AddSugar(sugarSpoon.RemoveSugar());
                             }
                         }
                     }
@@ -297,6 +295,7 @@ public class Player : MonoBehaviour
                         
                     }
                     
+                    // If you're looking at a sugar spoon, pick it up
                     else if (lastInteractable.GetComponent<SugarSpoon>() is { } sugarSpoon)
                     {
                         AddToHand(sugarSpoon);

@@ -5,6 +5,7 @@ public class SugarSpoon : Interactable
 {
     private bool hasSugar = false;
     [SerializeField] private GameObject sugar;
+    private float defaultSugar = 5f;
 
     private void Start()
     {
@@ -17,11 +18,14 @@ public class SugarSpoon : Interactable
         sugar.SetActive(true);
     }
 
-    public void RemoveSugar()
+    public float RemoveSugar()
     {
         hasSugar = false;
         sugar.SetActive(false);
+        return defaultSugar;
     }
+    
+    
 
     public bool HasSugar()
     {
