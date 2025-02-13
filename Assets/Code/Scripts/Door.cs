@@ -2,16 +2,32 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : Interactable
 {
-    public void Open()
+    private bool isOpen = false;
+
+    private void Open()
     {
         transform.DORotate(new Vector3(0f, -180f, 0f), 1f);
     }
 
-    public void Close()
+    private void Close()
     {
         transform.DORotate(new Vector3(0f, -90f, 0f), 1f);
+    }
+
+    public void Use()
+    {
+        if (!isOpen)
+        {
+            Open();
+            isOpen = true;
+        }
+        else
+        {
+            Close();
+            isOpen = false;
+        }
     }
 
     private void Update()

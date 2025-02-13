@@ -327,6 +327,12 @@ public class Player : MonoBehaviour
                         playerAudio.PickUp();
                         currentSpoon = sugarSpoon; // idk if this will be used
                     }
+                    
+                    // If you're looking at a door
+                    else if (lastInteractable.GetComponentInParent<Door>() is { } door)
+                    {
+                        door.Use();
+                    }
                 }
         
                 // You have something in your hand
