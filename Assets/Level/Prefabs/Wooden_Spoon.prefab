@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: f9e723bcb86c6492493bf974cced13a6, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: aed024c7ffa774a449c0a4bff6213474, type: 2}
     - target: {fileID: 919132149155446097, guid: f9e723bcb86c6492493bf974cced13a6, type: 3}
       propertyPath: m_Name
       value: Wooden_Spoon
