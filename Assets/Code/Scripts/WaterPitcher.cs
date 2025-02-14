@@ -95,6 +95,7 @@ public class WaterPitcher : Interactable
         }
         else
         {
+            // optimization issue?
             vfx.Stop();
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class LemonadePitcher : Interactable
 {
@@ -9,6 +10,8 @@ public class LemonadePitcher : Interactable
     [SerializeField] private Transform woodSpoonSpawnPoint;
     [SerializeField] private Transform waterPitcherSpawnPoint;
     [SerializeField] private Transform sugarSpoonSpawnPoint;
+
+    [SerializeField] private VisualEffect vfx;
 
     private float lemonJuice = 0f;
     private float sugar = 0f;
