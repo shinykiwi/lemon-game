@@ -11,11 +11,13 @@ public class LemonadePitcher : Interactable
     [SerializeField] private Transform waterPitcherSpawnPoint;
     [SerializeField] private Transform sugarSpoonSpawnPoint;
 
+    [SerializeField] private GameObject[] liquidLayers;
     [SerializeField] private VisualEffect vfx;
+
+    private Material liquidMaterial;
 
     private float lemonJuice = 0f;
     private float sugar = 0f;
-    
 
     public void EnterStirringMode()
     {
