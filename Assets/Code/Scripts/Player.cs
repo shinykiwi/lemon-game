@@ -251,12 +251,16 @@ public class Player : MonoBehaviour
                     }
                     
                     // If you're aiming at the sink
-                    else if (lastInteractable.GetComponent<Sink>())
+                    else if (lastInteractable.GetComponent<Sink>() is { } sink)
                     {
                         // If you're holding a water pitcher
                         if (itemInHand.GetComponent<WaterPitcher>() is { } waterPitcher)
                         {
-                            waterPitcher.AddWater();
+                            if (sink.IsTapOn())
+                            {
+                                waterPitcher.AddWater();
+                            }
+                            
                         }
                         
                         // // Maybe if you are holding a lemon, you can wash it?
@@ -332,6 +336,11 @@ public class Player : MonoBehaviour
                     else if (lastInteractable.GetComponentInParent<Door>() is { } door)
                     {
                         door.Use();
+                    }
+                    
+                    else if (lastInteractable.GetComponent<Sink>() is { } sink)
+                    {
+                        sink.ToggleTap();
                     }
                 }
         
