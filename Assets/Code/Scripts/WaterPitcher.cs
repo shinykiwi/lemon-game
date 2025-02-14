@@ -1,13 +1,22 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class WaterPitcher : Interactable
 {
     [SerializeField] private float water = 0f;
+    [SerializeField] private VisualEffect vfx;
+    
     private bool pouring = false;
     private float pouringAngle = -55;
     private float maxWaterAmount = 100f;
+
+    private void Start()
+    {
+        vfx.Stop();
+    }
 
     public void AddWater(float w = 25f)
     {
@@ -54,6 +63,7 @@ public class WaterPitcher : Interactable
             pouring = true;
             Quaternion q = transform.rotation;
             transform.DOLocalRotate(new Vector3(pouringAngle, q.y, q.z), 0.5f);
+            vfx.Play();
         }
         // If already pouring, stop pouring
         else
@@ -68,6 +78,7 @@ public class WaterPitcher : Interactable
         pouring = false;
         Quaternion q = transform.rotation;
         transform.DOLocalRotate(new Vector3(0, q.y, q.z), 0.5f);
+        vfx.Stop();
     }
 
     public bool IsPouring()
@@ -81,6 +92,10 @@ public class WaterPitcher : Interactable
         if (pouring && water > 0 )
         {
             water -= 0.1f;
+        }
+        else
+        {
+            vfx.Stop();
         }
     }
 }
