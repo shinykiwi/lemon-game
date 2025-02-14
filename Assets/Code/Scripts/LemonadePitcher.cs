@@ -27,6 +27,7 @@ public class LemonadePitcher : Interactable
     public void AddLemonJuice(float juice)
     {
         lemonJuice += juice;
+        vfx.Play();
     }
     
     public void AddSugar(float s)
