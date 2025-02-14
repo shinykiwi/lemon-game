@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class LemonDeliverer : MonoBehaviour
@@ -9,9 +10,11 @@ public class LemonDeliverer : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+        StartCoroutine(DeliveryCoroutine(10));
     }
 
-    public void DeliverLemons()
+    private void DeliverLemons()
     {
         // Spawn a box of lemons here
         GameObject box = Instantiate(lemonBoxPrefab);
@@ -19,5 +22,13 @@ public class LemonDeliverer : MonoBehaviour
         
         // Play doorbell sound effect
         audioSource.Play();
+    }
+    
+    IEnumerator DeliveryCoroutine(float x)
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(x);
+        
+        DeliverLemons();
     }
 }

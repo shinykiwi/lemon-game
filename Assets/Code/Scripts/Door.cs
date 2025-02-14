@@ -5,15 +5,26 @@ using UnityEngine;
 public class Door : Interactable
 {
     private bool isOpen = false;
+    [SerializeField] private AudioClip openDoor;
+    [SerializeField] private AudioClip closeDoor;
+
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void Open()
     {
         transform.DORotate(new Vector3(0f, -180f, 0f), 1f);
+        audioSource.clip = openDoor;
     }
 
     private void Close()
     {
         transform.DORotate(new Vector3(0f, -90f, 0f), 1f);
+        audioSource.clip = closeDoor;
     }
 
     public void Use()
@@ -27,6 +38,11 @@ public class Door : Interactable
         {
             Close();
             isOpen = false;
+        }
+        
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play(); 
         }
     }
 
