@@ -77,4 +77,10 @@ public class LemonadePitcher : Interactable
         camera.enabled = false;
         EnableInteract();
     }
+
+    private void UpdateLiquid()
+    {
+        // Thresholds based on percentages of the liquid
+        //
+    }
 }

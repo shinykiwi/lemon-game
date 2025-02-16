@@ -366,6 +366,7 @@ public class Player : MonoBehaviour
                 {
                     currentLemonadePitcher.ExitSqueezingMode();
                     currentLemon.EnableInteract();
+                    currentLemon.transform.localScale = new Vector3(1, 1, 1);
                     state = State.Idle;
                 }
                 break;
