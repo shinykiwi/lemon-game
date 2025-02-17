@@ -110,4 +110,9 @@ public class Interactable : MonoBehaviour
     {
         return canInteract;
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        Debug.Log(other.gameObject.name);
+    }
 }
