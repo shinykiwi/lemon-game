@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+namespace Code.Scripts
 {
-
-    public Texture2D cursorImg;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class GameManager : MonoBehaviour
     {
-        Cursor.SetCursor(cursorImg, Vector2.zero, CursorMode.Auto);
+
+        public Texture2D cursorImg;
+    
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
+        {
+            Cursor.SetCursor(cursorImg, Vector2.zero, CursorMode.Auto);
+        }
+    
+    
+    
     }
-    
-    
-    
 }

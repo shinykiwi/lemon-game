@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using EzySlice;
 using TMPro;
 using Unity.Cinemachine;
@@ -86,7 +84,7 @@ namespace Code.Scripts
         /// <param name="planeWorldPosition"></param>
         /// <param name="planeWorldDirection"></param>
         /// <returns></returns>
-        public GameObject[] SliceMesh(Vector3 planeWorldPosition, Vector3 planeWorldDirection) {
+        private GameObject[] SliceMesh(Vector3 planeWorldPosition, Vector3 planeWorldDirection) {
             return objectToSlice.SliceInstantiate(planeWorldPosition, planeWorldDirection);
         }
         

@@ -7341,11 +7341,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 55a30518061617741ad43d2c72323faf, type: 2}
     - target: {fileID: -3973107660126017756, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -3556817346404478780, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2445977506380834873, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -7353,7 +7353,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 55a30518061617741ad43d2c72323faf, type: 2}
     - target: {fileID: -1840680963563420374, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: m_Name
@@ -7361,11 +7361,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2238249416642749085, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2909334989756356583, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5039687269024256309, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -7381,7 +7381,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 55a30518061617741ad43d2c72323faf, type: 2}
     - target: {fileID: 6471496338278676438, guid: 4be83ffa3832a634180727370e28555f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
