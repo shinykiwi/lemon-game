@@ -1,60 +1,62 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 
-public class Door : Interactable
+namespace Code.Scripts
 {
-    private bool isOpen = false;
-    [SerializeField] private AudioClip openDoor;
-    [SerializeField] private AudioClip closeDoor;
-
-    private AudioSource audioSource;
-
-    private void Start()
+    public class Door : Interactable
     {
-        audioSource = GetComponent<AudioSource>();
-    }
+        private bool isOpen = false;
+        [SerializeField] private AudioClip openDoor;
+        [SerializeField] private AudioClip closeDoor;
 
-    private void Open()
-    {
-        transform.DORotate(new Vector3(0f, -180f, 0f), 1f);
-        audioSource.clip = openDoor;
-    }
+        private AudioSource audioSource;
 
-    private void Close()
-    {
-        transform.DORotate(new Vector3(0f, -90f, 0f), 1f);
-        audioSource.clip = closeDoor;
-    }
-
-    public void Use()
-    {
-        if (!isOpen)
+        private void Start()
         {
-            Open();
-            isOpen = true;
+            audioSource = GetComponent<AudioSource>();
         }
-        else
+
+        private void Open()
         {
-            Close();
-            isOpen = false;
+            transform.DORotate(new Vector3(0f, -180f, 0f), 1f);
+            audioSource.clip = openDoor;
         }
+
+        private void Close()
+        {
+            transform.DORotate(new Vector3(0f, -90f, 0f), 1f);
+            audioSource.clip = closeDoor;
+        }
+
+        public void Use()
+        {
+            if (!isOpen)
+            {
+                Open();
+                isOpen = true;
+            }
+            else
+            {
+                Close();
+                isOpen = false;
+            }
         
-        if (!audioSource.isPlaying)
-        {
-            audioSource.Play(); 
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play(); 
+            }
         }
-    }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
+        private void Update()
         {
-            Open();
-        }
-        else if (Input.GetKeyDown(KeyCode.F))
-        {
-            Close();
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Open();
+            }
+            else if (Input.GetKeyDown(KeyCode.F))
+            {
+                Close();
+            }
         }
     }
 }
