@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8bbff4f3517cf5d458c294bee1cc04c2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7c84c3739c50faa43a3c2ad9305ca173, type: 2}
     - target: {fileID: 919132149155446097, guid: 8bbff4f3517cf5d458c294bee1cc04c2, type: 3}
       propertyPath: m_Name
       value: TrashCan
@@ -102,3 +106,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d147d09b9c1f48edab8088d9bf34414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canInteract: 1
