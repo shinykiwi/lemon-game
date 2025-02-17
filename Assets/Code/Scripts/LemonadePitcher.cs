@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -13,22 +14,20 @@ public class LemonadePitcher : Interactable
 
     [SerializeField] private GameObject[] liquidLayers;
     [SerializeField] private VisualEffect vfx;
-
-    private Material liquidMaterial;
     private int layerCount = 0;
 
     private float lemonJuice = 0f;
     private float sugar = 0f;
     private float water = 0f;
     private float maxLiquid = 100f;
-
-    private Color yellowColor = new Color(255, 202, 73);
-    private Color waterColor = new Color(174, 219, 255);
-
+    
+    private Color yellowColor = new Color(1f, 0.792f, 0.286f);
+    private Color waterColor = new Color(0.682f, 0.8588f, 1f);
+    private Sequence sequence;
 
     private void Start()
     {
-        liquidMaterial = liquidLayers[0].GetComponent<MeshRenderer>().sharedMaterial;
+        sequence = DOTween.Sequence();
     }
 
     public void EnterStirringMode()
@@ -36,9 +35,9 @@ public class LemonadePitcher : Interactable
         camera.enabled = true;
     }
 
-    public void AddLemonJuice(float juice)
+    public void AddLemonJuice()
     {
-        lemonJuice += juice;
+        lemonJuice += 1f; // amount of juice adding, hardcoded for now
         vfx.Play();
         UpdateLiquid();
     }
@@ -119,7 +118,6 @@ public class LemonadePitcher : Interactable
                      if (i != layerCount)
                      {
                          AddLayer();
-                         
                      }
 
                      break;
@@ -136,9 +134,33 @@ public class LemonadePitcher : Interactable
 
     private void UpdateLiquidColour()
     {
+        Color color = waterColor;
+        // Only water, should only show water colour
+        if (water > 0 && lemonJuice == 0)
+        {
+            color = waterColor;
+        }
+            
+        // Only lemon juice, should only show lemon juice
+        else if (water == 0 && lemonJuice > 0)
+        {
+            color = yellowColor;
+        }
+        
+        // It must be a mix of lemon juice and water
+        else
+        {
+            float lemonPercent = lemonJuice / maxLiquid;
+            Debug.Log(lemonPercent);
+            
+            color = Color.Lerp(yellowColor, waterColor, lemonPercent);
+        }
+        
         foreach (GameObject layer in liquidLayers)
         {
-            layer.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_BaseColor", yellowColor);
+            Material mat = layer.GetComponent<MeshRenderer>().material;
+            mat.DOColor(color, 1f);
+
         }
     }
 

@@ -350,7 +350,7 @@ public class Player : MonoBehaviour
                 if (currentLemon.Squeeze())
                 {
                     playerAudio.SqueezeLemon();
-                    currentLemonadePitcher.AddLemonJuice(5);
+                    currentLemonadePitcher.AddLemonJuice();
                 }
                 else
                 {
