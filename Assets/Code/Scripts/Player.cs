@@ -6,6 +6,7 @@ namespace Code.Scripts
     public enum State
     {
         Idle,
+        Holding,
         Slicing,
         Squeezing,
         Sugaring,
@@ -132,11 +133,78 @@ namespace Code.Scripts
         {
             switch (state)
             {
-                case State.Idle:
+                case State.Holding:
                     // If you have an item in your hand
                     if (itemInHand)
                     {
-                        // If you're aiming at the lemon slicer
+                        // Throw whatever object is in your hand
+                        throwController.ThrowObject(itemInHand);
+                        itemInHand = null;
+                        state = State.Idle;
+                        // woosh sound?
+                    }
+                    break;
+            }
+        
+        }
+
+        // Right click
+        public void OnInteract(InputValue value)
+        {
+            switch (state)
+            {
+                case State.Idle:
+                        // If you're looking at a lemon, pick it up
+                        if (lastInteractable.GetComponent<LemonSlice>() is { } lemonSlice)
+                        {
+                            AddToHand(lemonSlice);
+                            playerAudio.PickUp();
+                            state = State.Holding;
+
+                        }
+            
+                        // If you're looking at a cutting board, enter slicing mode
+                        else if (lastInteractable.GetComponent<LemonSlicer>() is { } slicer)
+                        {
+                            slicer.EnterSliceMode();
+                            currentLemonSlicer = slicer;
+                            state = State.Slicing;
+
+                        }
+                    
+                        // If you're looking at a water pitcher, pick it up
+                        else if (lastInteractable.GetComponent<WaterPitcher>() is { } waterPitcher)
+                        {
+                            AddToHand(waterPitcher);
+                            playerAudio.PickUp();
+                            currentWaterPitcher = waterPitcher;
+                            state = State.Holding;
+
+                        }
+                    
+                        // If you're looking at a sugar spoon, pick it up
+                        else if (lastInteractable.GetComponent<SugarSpoon>() is { } sugarSpoon)
+                        {
+                            AddToHand(sugarSpoon);
+                            playerAudio.PickUp();
+                            state = State.Holding;
+                        }
+                    
+                        // If you're looking at a door
+                        else if (lastInteractable.GetComponentInParent<Door>() is { } door)
+                        {
+                            door.Use();
+                        }
+                    
+                        else if (lastInteractable.GetComponent<Sink>() is { } sink)
+                        {
+                            sink.ToggleTap();
+                        }
+
+                        break;
+                
+                case State.Holding:
+                    // If you're aiming at the lemon slicer
                         if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
                         {
                             // If the item you're holding is a lemon
@@ -213,9 +281,14 @@ namespace Code.Scripts
                         // If you're aiming at a trash can
                         else if (lastInteractable.GetComponent<TrashCan>())
                         {
-                            itemInHand.transform.SetParent(null);
-                            Destroy(itemInHand.gameObject);
-                            itemInHand = null;
+                            // If you're holding a lemon slice, throw it out
+                            if (itemInHand as LemonSlice)
+                            {
+                                itemInHand.transform.SetParent(null);
+                                Destroy(itemInHand.gameObject);
+                                itemInHand = null;
+                                state = State.Idle;
+                            }
                         }
                     
                         // If you're aiming at the sink
@@ -237,90 +310,19 @@ namespace Code.Scripts
                             //     
                             // }
                         }
-    
-                        // You're not aiming at lemon slicer
+                    
+                        // If you're not aiming at anything just drop it
                         else
                         {
-                            // Throw whatever object is in your hand
-                            throwController.ThrowObject(itemInHand);
-                            itemInHand = null;
-                            // woosh sound?
+                            DropFromHand();
+                            playerAudio.PutBack();
+                            state = State.Idle;
                         }
-                    }
                     break;
-        
+            
                 case State.Slicing:
                     currentLemonSlicer.InitiateSlice();
                     state = State.Idle;
-                    break;
-            }
-        
-        }
-
-        // Right click
-        public void OnInteract(InputValue value)
-        {
-            switch (state)
-            {
-                case State.Idle:
-                
-                    // You have nothing in your hand
-                    if (!itemInHand)
-                    {
-                        // If you're looking at a lemon, pick it up
-                        if (lastInteractable.GetComponent<LemonSlice>() is { } lemonSlice)
-                        {
-                            AddToHand(lemonSlice);
-                            playerAudio.PickUp();
-                        }
-            
-                        // If you're looking at a cutting board, enter slicing mode
-                        else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
-                        {
-                            lemonSlicer.EnterSliceMode();
-                            currentLemonSlicer = lemonSlicer;
-                            state = State.Slicing;
-
-                        }
-                    
-                        // If you're looking at a water pitcher, pick it up
-                        else if (lastInteractable.GetComponent<WaterPitcher>() is { } waterPitcher)
-                        {
-                            AddToHand(waterPitcher);
-                            playerAudio.PickUp();
-                            currentWaterPitcher = waterPitcher;
-                        
-                        }
-                    
-                        // If you're looking at a sugar spoon, pick it up
-                        else if (lastInteractable.GetComponent<SugarSpoon>() is { } sugarSpoon)
-                        {
-                            AddToHand(sugarSpoon);
-                            playerAudio.PickUp();
-                        }
-                    
-                        // If you're looking at a door
-                        else if (lastInteractable.GetComponentInParent<Door>() is { } door)
-                        {
-                            door.Use();
-                        }
-                    
-                        else if (lastInteractable.GetComponent<Sink>() is { } sink)
-                        {
-                            sink.ToggleTap();
-                        }
-                    }
-        
-                    // You have something in your hand
-                    else
-                    {
-                        DropFromHand();
-                        playerAudio.PutBack();
-                    }
-
-                    break;
-            
-                case State.Slicing:
                     break;
             
                 case State.Squeezing:
