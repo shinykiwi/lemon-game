@@ -12,6 +12,9 @@ public class WaterPitcher : Interactable
     private bool pouring = false;
     private float pouringAngle = -55;
     private float maxWaterAmount = 100f;
+    private static float waterPourAmount = 0.1f;
+
+    private LemonadePitcher lemonadePitcher;
 
     private void Start()
     {
@@ -50,13 +53,19 @@ public class WaterPitcher : Interactable
         return water;
     }
 
+    public float GetWaterPourAmount()
+    {
+        return waterPourAmount;
+    }
+
     public bool HasWater()
     {
         return water > 0;
     }
 
-    public void ToggleWaterPour()
+    public void ToggleWaterPour(LemonadePitcher l)
     {
+        lemonadePitcher = l;
         // If not pouring, pour water
         if (!pouring)
         {
@@ -91,7 +100,8 @@ public class WaterPitcher : Interactable
         // Only decrease water count if currently pouring and there is water to pour
         if (pouring && water > 0 )
         {
-            water -= 0.1f;
+            water -= waterPourAmount;
+            lemonadePitcher.AddWater(waterPourAmount);
         }
         else
         {

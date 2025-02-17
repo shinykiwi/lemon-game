@@ -376,7 +376,7 @@ public class Player : MonoBehaviour
                 // Normal pouring situation
                 else
                 {
-                    currentWaterPitcher.ToggleWaterPour();
+                    currentWaterPitcher.ToggleWaterPour(currentLemonadePitcher);
                 }
                 
                 break;
