@@ -212,7 +212,8 @@ namespace Code.Scripts
                             {
                                 SnapToCuttingBoard(itemInHand, lemonSlicer);
                                 playerAudio.PutBack();
-                                    
+                                state = State.Idle;
+
                             }
                         }
             
@@ -349,7 +350,7 @@ namespace Code.Scripts
                     {
                         currentLemonadePitcher.Exit();   
                         AddToHand(currentWaterPitcher);
-                        state = State.Idle;
+                        state = State.Holding;
                     }
                 
                     // Normal pouring situation
