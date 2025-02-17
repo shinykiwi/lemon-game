@@ -46,8 +46,7 @@ public class Interactable : MonoBehaviour
     /// </summary>
     public void ShowOutline()
     {
-        //f (meshRenderer && outline)
-            outline.enabled = true;
+        outline.enabled = true;
         
     }
 

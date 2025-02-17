@@ -138,24 +138,14 @@ public class Player : MonoBehaviour
             // If it's something that can have an outline
             if (hitObject.GetComponent<Interactable>() is { } interactable)
             {
-                // If you can interact with it
-                if (interactable.CanInteract())
-                {
-                    interactable.ShowOutline();
-
-                    // Keep it for later
-                    lastInteractable = interactable;
-                }
+                if(lastInteractable) lastInteractable.HideOutline();
+                interactable.ShowOutline();
+                lastInteractable = interactable;
             }
             else
             {
                 if (lastInteractable) lastInteractable.HideOutline();
             }
-        }
-        else
-        {
-            if (lastInteractable) lastInteractable.HideOutline();
-            
         }
     }
     
@@ -260,16 +250,16 @@ public class Player : MonoBehaviour
                             {
                                 waterPitcher.AddWater();
                             }
-                            
+                    
                         }
-                        
+                
                         // // Maybe if you are holding a lemon, you can wash it?
                         // else if (itemInHand.GetComponent<LemonSlice>())
                         // {
                         //     
                         // }
                     }
-            
+    
                     // You're not aiming at lemon slicer
                     else
                     {
@@ -280,11 +270,11 @@ public class Player : MonoBehaviour
                     }
                 }
                 break;
-            
-            case State.Slicing:
-                currentLemonSlicer.InitiateSlice();
-                state = State.Idle;
-                break;
+        
+        case State.Slicing:
+            currentLemonSlicer.InitiateSlice();
+            state = State.Idle;
+            break;
         }
         
     }

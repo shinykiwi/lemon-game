@@ -5,13 +5,14 @@ using UnityEngine;
 public class LemonDeliverer : MonoBehaviour
 {
     [SerializeField] private GameObject lemonBoxPrefab;
+    [SerializeField] private int deliveryDelayTime = 5;
     private AudioSource audioSource;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
 
-        StartCoroutine(DeliveryCoroutine(10));
+        StartCoroutine(DeliveryCoroutine(deliveryDelayTime));
     }
 
     private void DeliverLemons()
@@ -24,7 +25,7 @@ public class LemonDeliverer : MonoBehaviour
         audioSource.Play();
     }
     
-    IEnumerator DeliveryCoroutine(float x)
+    IEnumerator DeliveryCoroutine(int x)
     {
         //yield on a new YieldInstruction that waits for 5 seconds.
         yield return new WaitForSeconds(x);
