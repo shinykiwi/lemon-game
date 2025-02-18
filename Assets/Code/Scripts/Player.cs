@@ -196,6 +196,7 @@ namespace Code.Scripts
                             playerAudio.PutBack();
                             state = State.Idle;
                         }
+                        
                         // If you're aiming at the lemon slicer
                         else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
                         {
@@ -249,6 +250,16 @@ namespace Code.Scripts
                                     currentLemonadePitcher.AddSugar(sugarSpoon.RemoveSugar());
                                 }
                             }
+                            
+                            // else if (itemInHand.GetComponent<Glass>() is { } glass)
+                            // {
+                            //     // If the glass is empty
+                            //     if (glass.IsEmpty())
+                            //     {
+                            //         // Add liquid
+                            //     }
+                            //     
+                            // }
                         }
                     
                         // If you're aiming at a sugar jar

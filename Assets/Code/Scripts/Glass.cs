@@ -1,17 +1,14 @@
-using Code.Scripts;
-using UnityEngine;
-
-public class Glass : Holdable
+namespace Code.Scripts
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class Glass : Holdable
     {
-        
-    }
+        private bool isEmpty = true;
 
-    // Update is called once per frame
-    void Update()
-    {
+        public bool IsEmpty()
+        {
+            return isEmpty;
+        }
+        
         
     }
 }
