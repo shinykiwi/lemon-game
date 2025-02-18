@@ -4,7 +4,7 @@ using UnityEngine.VFX;
 
 namespace Code.Scripts
 {
-    public class WaterPitcher : Interactable
+    public class WaterPitcher : Holdable
     {
         [SerializeField] private float water = 0f;
         [SerializeField] private VisualEffect vfx;

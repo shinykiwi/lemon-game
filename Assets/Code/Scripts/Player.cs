@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,14 +10,13 @@ namespace Code.Scripts
         Holding,
         Slicing,
         Squeezing,
-        Sugaring,
         Stirring,
         Pouring
     }
     public class Player : MonoBehaviour
     {
-        private Interactable lastInteractable;
-        private Interactable itemInHand;
+        public Interactable lastInteractable;
+        public Interactable itemInHand;
         private LemonSlice currentLemon;
         private LemonSlicer currentLemonSlicer;
         private LemonadePitcher currentLemonadePitcher;
@@ -25,7 +25,7 @@ namespace Code.Scripts
         private Throw throwController;
         private PlayerAudio playerAudio;
     
-        private State state = State.Idle;
+        public State state = State.Idle;
 
         [SerializeField] private Transform hand;
 
@@ -117,6 +117,7 @@ namespace Code.Scripts
                 // If it's something that can have an outline
                 if (hitObject.GetComponent<Interactable>() is { } interactable)
                 {
+                    Debug.Log(interactable.gameObject.name);
                     if(lastInteractable) lastInteractable.HideOutline();
                     interactable.ShowOutline();
                     lastInteractable = interactable;
@@ -124,6 +125,7 @@ namespace Code.Scripts
                 else
                 {
                     if (lastInteractable) lastInteractable.HideOutline();
+                    lastInteractable = null;
                 }
             }
         }
@@ -154,13 +156,12 @@ namespace Code.Scripts
             switch (state)
             {
                 case State.Idle:
-                        // If you're looking at a lemon, pick it up
-                        if (lastInteractable.GetComponent<LemonSlice>() is { } lemonSlice)
+                        // If you're looking at something that you can hold, pick it up
+                        if (lastInteractable.GetComponent<Holdable>() is { } holdable)
                         {
-                            AddToHand(lemonSlice);
+                            AddToHand(holdable);
                             playerAudio.PickUp();
                             state = State.Holding;
-
                         }
             
                         // If you're looking at a cutting board, enter slicing mode
@@ -170,24 +171,6 @@ namespace Code.Scripts
                             currentLemonSlicer = slicer;
                             state = State.Slicing;
 
-                        }
-                    
-                        // If you're looking at a water pitcher, pick it up
-                        else if (lastInteractable.GetComponent<WaterPitcher>() is { } waterPitcher)
-                        {
-                            AddToHand(waterPitcher);
-                            playerAudio.PickUp();
-                            currentWaterPitcher = waterPitcher;
-                            state = State.Holding;
-
-                        }
-                    
-                        // If you're looking at a sugar spoon, pick it up
-                        else if (lastInteractable.GetComponent<SugarSpoon>() is { } sugarSpoon)
-                        {
-                            AddToHand(sugarSpoon);
-                            playerAudio.PickUp();
-                            state = State.Holding;
                         }
                     
                         // If you're looking at a door
@@ -204,8 +187,17 @@ namespace Code.Scripts
                         break;
                 
                 case State.Holding:
-                    // If you're aiming at the lemon slicer
-                        if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
+
+                        // If you're not looking at anything
+                        if (lastInteractable == null)
+                        {
+                            DropFromHand();
+                            Debug.Log("Dropping item");
+                            playerAudio.PutBack();
+                            state = State.Idle;
+                        }
+                        // If you're aiming at the lemon slicer
+                        else if (lastInteractable.GetComponent<LemonSlicer>() is { } lemonSlicer)
                         {
                             // If the item you're holding is a lemon
                             if (itemInHand as LemonSlice)
@@ -312,13 +304,6 @@ namespace Code.Scripts
                             // }
                         }
                     
-                        // If you're not aiming at anything just drop it
-                        else
-                        {
-                            DropFromHand();
-                            playerAudio.PutBack();
-                            state = State.Idle;
-                        }
                     break;
             
                 case State.Slicing:
@@ -336,7 +321,7 @@ namespace Code.Scripts
                     {
                         currentLemonadePitcher.ExitSqueezingMode();
                         currentLemon.EnableInteract();
-                        currentLemon.transform.localScale = new Vector3(1, 1, 1);
+                        currentLemon.gameObject.transform.DOScale(new Vector3(1, 1, 1), 0.5f) ;
                         state = State.Idle;
                     }
                     break;

@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LemonSlice : Interactable
+public class LemonSlice : Holdable
 {
     private MeshCollider meshCollider;
     private Rigidbody rigidbody;

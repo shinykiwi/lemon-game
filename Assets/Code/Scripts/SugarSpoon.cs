@@ -2,7 +2,7 @@ using System;
 using Code.Scripts;
 using UnityEngine;
 
-public class SugarSpoon : Interactable
+public class SugarSpoon : Holdable
 {
     private bool hasSugar = false;
     [SerializeField] private GameObject sugar;

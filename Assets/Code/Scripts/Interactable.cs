@@ -2,9 +2,8 @@ using UnityEngine;
 
 namespace Code.Scripts
 {
-    /// <summary>
-    /// General class for an object that can have an outline and be interacted with.
-    /// </summary>
+    [RequireComponent(typeof(Collider))]
+    
     public class Interactable : MonoBehaviour
     {
     
