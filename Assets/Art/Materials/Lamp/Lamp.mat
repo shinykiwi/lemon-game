@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: KitchenFloor
+  m_Name: Lamp
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -28,11 +28,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: f2177bf668e61da40ae1bb7a00431339, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9694163ea1e85374688106a155c229d4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 34a4384b7fc19d949842427368f908f6, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9770b5204ba35a54dbbcd3a0b9139e85, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -48,15 +48,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 5e449e82abc6e6442b2a708ed6824dd9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 614c4414081251142a0116316843e805, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f2177bf668e61da40ae1bb7a00431339, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9694163ea1e85374688106a155c229d4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: a62150a261def704da8288f24dc558b7, type: 3}
+        m_Texture: {fileID: 2800000, guid: 799bbfddac37c8041ab78e0f2a4b6aa3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -123,7 +123,7 @@ Material:
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &6032396908819440494
+--- !u!114 &2788274526771921669
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
