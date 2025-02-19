@@ -4406,6 +4406,10 @@ PrefabInstance:
       propertyPath: vfx
       value: 
       objectReference: {fileID: 1326877770}
+    - target: {fileID: 7100901652690115778, guid: d40eac93ba20a427698170353d754b8a, type: 3}
+      propertyPath: impactSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 320ffc5ba588fc54ebcbb31983405ddc, type: 3}
     - target: {fileID: 7791769103899387553, guid: d40eac93ba20a427698170353d754b8a, type: 3}
       propertyPath: m_Convex
       value: 1
@@ -7739,7 +7743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
-  dropSound: {fileID: 0}
+  impactSound: {fileID: 0}
 --- !u!64 &1264528914
 MeshCollider:
   m_ObjectHideFlags: 0

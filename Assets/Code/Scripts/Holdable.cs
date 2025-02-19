@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Code.Scripts
@@ -5,8 +6,10 @@ namespace Code.Scripts
     //[RequireComponent(typeof(Rigidbody))]
     public class Holdable : Interactable
     {
-        [SerializeField] private AudioClip dropSound;
+        [SerializeField] private AudioClip impactSound;
         private PlayerAudio playerAudio;
+
+        private bool canPlay = false;
 
         protected override void OnEnable()
         {
@@ -14,13 +17,18 @@ namespace Code.Scripts
             playerAudio = FindFirstObjectByType<PlayerAudio>();
         }
 
-        public void DropSound()
+        public void ImpactSound()
         {
-            if (dropSound)
+            if (impactSound)
             {
-                playerAudio.Play(dropSound);
+                playerAudio.Play(impactSound);
             }
             
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            ImpactSound();
         }
     }
 }

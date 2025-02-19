@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
-  dropSound: {fileID: 0}
+  impactSound: {fileID: 8300000, guid: bba57c139af439f44876d6a9973faaf3, type: 3}
 --- !u!114 &1005163364520505717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +147,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -3387821269331026746, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
+  m_Mesh: {fileID: -7014899514528589010, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
 --- !u!54 &2853665999789985507
 Rigidbody:
   m_ObjectHideFlags: 0

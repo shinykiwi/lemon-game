@@ -253,6 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
+  impactSound: {fileID: 8300000, guid: 1b1d9b046b1f2a5469fe06700805d80d, type: 3}
   sugar: {fileID: 8858700081959770005}
 --- !u!54 &880392872170478841
 Rigidbody:
