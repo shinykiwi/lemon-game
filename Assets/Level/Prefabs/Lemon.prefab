@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.54231334
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.87752235
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -62,12 +62,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 412e7dd01ccfd4b52bbf4bdb2f87aa3d, type: 2}
+      objectReference: {fileID: 2100000, guid: 9f14579b495f31c47a7260f34a16b19e, type: 2}
     - target: {fileID: 919132149155446097, guid: 35c2d6fda1d984b478d01623ac81e6a8, type: 3}
       propertyPath: m_Name
       value: Lemon
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
-  squeeze: 1.5
+  dropSound: {fileID: 0}
 --- !u!114 &1005163364520505717
 MonoBehaviour:
   m_ObjectHideFlags: 0
