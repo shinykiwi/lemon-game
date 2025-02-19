@@ -1,7 +1,7 @@
 using Code.Scripts;
 using UnityEngine;
 
-public class SugarJar : Holdable
+public class SugarJar : Interactable
 {
     private float sugarAmount = 100f;
 }

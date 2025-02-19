@@ -22,6 +22,8 @@ namespace Code.Scripts
         private LemonadePitcher currentLemonadePitcher;
         private WaterPitcher currentWaterPitcher;
 
+        private LemonSplatter lemonSplatter;
+
         private Throw throwController;
         private PlayerAudio playerAudio;
     
@@ -34,7 +36,8 @@ namespace Code.Scripts
             GetComponentInChildren<ReticleController>();
             playerAudio = GetComponentInChildren<PlayerAudio>();
             throwController = gameObject.AddComponent<Throw>();
-        
+            lemonSplatter = GetComponent<LemonSplatter>();
+
         }
 
         /// <summary>
@@ -117,7 +120,7 @@ namespace Code.Scripts
                 // If it's something that can have an outline
                 if (hitObject.GetComponent<Interactable>() is { } interactable)
                 {
-                    Debug.Log(interactable.gameObject.name);
+                    //Debug.Log(interactable.gameObject.name);
                     if(lastInteractable) lastInteractable.HideOutline();
                     interactable.ShowOutline();
                     lastInteractable = interactable;
@@ -139,9 +142,16 @@ namespace Code.Scripts
                     // If you have an item in your hand
                     if (itemInHand)
                     {
+                        if (itemInHand.GetComponent<LemonSlice>() is { } lemon)
+                        {
+                            lemonSplatter.SplatterLemon(lemon);
+                        }
                         // Throw whatever object is in your hand
                         throwController.ThrowObject(itemInHand);
                         itemInHand = null;
+
+                        
+                        
                         state = State.Idle;
                         // woosh sound?
                     }

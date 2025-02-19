@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Code.Scripts
 {
-    [RequireComponent(typeof(Collider))]
+    //[RequireComponent(typeof(Collider))]
     
     public class Interactable : MonoBehaviour
     {
@@ -13,7 +13,7 @@ namespace Code.Scripts
         /// <summary>
         /// Gets the outline or creates one if there isn't. Hides the outline by default.
         /// </summary>
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             outline = gameObject.GetComponent<Outline>();
 
@@ -107,6 +107,8 @@ namespace Code.Scripts
         {
             return canInteract;
         }
+        
+        
     
     }
 }

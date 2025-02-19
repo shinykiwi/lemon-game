@@ -21,7 +21,7 @@ namespace Code.Scripts
             audioSource = GetComponent<AudioSource>();
         }
 
-        private void Play(AudioClip clip)
+        public void Play(AudioClip clip)
         {
             if (!audioSource.isPlaying)
             {
