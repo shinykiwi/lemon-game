@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Code.Scripts
@@ -17,7 +18,7 @@ namespace Code.Scripts
             playerAudio = FindFirstObjectByType<PlayerAudio>();
         }
 
-        public void ImpactSound()
+        private void ImpactSound()
         {
             if (impactSound)
             {
@@ -26,9 +27,30 @@ namespace Code.Scripts
             
         }
 
+        /// <summary>
+        /// Lets impact sounds be played upon collision but only if triggered from a drop.
+        /// </summary>
+        public void PlayDropSound()
+        {
+            canPlay = true;
+            StartCoroutine(DisablePlay());
+
+        }
+
+        private IEnumerator DisablePlay()
+        {
+            yield return new WaitForSeconds(2);
+
+            canPlay = false;
+        }
+
         private void OnCollisionEnter(Collision other)
         {
-            ImpactSound();
+            if (canPlay)
+            {
+                ImpactSound();
+            }
+            
         }
     }
 }

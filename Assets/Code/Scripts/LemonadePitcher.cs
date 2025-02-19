@@ -25,11 +25,6 @@ namespace Code.Scripts
         [SerializeField] private Color yellowColor = new Color(1f, 0.792f, 0.286f);
         [SerializeField] private Color waterColor = new Color(0.682f, 0.8588f, 1f);
 
-        public void EnterStirringMode()
-        {
-            camera.enabled = true;
-        }
-
         public void AddLemonJuice()
         {
             lemonJuice += 1f; // amount of juice adding, hardcoded for now
@@ -40,6 +35,7 @@ namespace Code.Scripts
         public void AddSugar(float s)
         {
             sugar += s;
+            UpdateLiquid();
         }
 
         public void AddWater(float w)
@@ -71,11 +67,6 @@ namespace Code.Scripts
         {
             camera.enabled = false;
             EnableInteract();
-        }
-    
-        public void ExitStirringMode()
-        {
-            camera.enabled = false;
         }
 
         public void Exit()
@@ -124,7 +115,18 @@ namespace Code.Scripts
             }
          
             UpdateLiquidColour();
+
+            // All three elements are present
+            if (sugar > 0 && water > 0 && lemonJuice > 0)
+            {
+                LemonadeMade();
+            }
         
+        }
+
+        private void LemonadeMade()
+        {
+            
         }
 
         private void UpdateLiquidColour()
