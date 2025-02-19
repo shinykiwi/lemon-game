@@ -126,25 +126,27 @@ namespace Code.Scripts
         
         
         /// <summary>
-        /// Slices the lemon into two, adds the LemonSlice component.
+        /// Slices the lemon into two if it exists, then adds the LemonSlice component.
         /// </summary>
         private void Slice()
         {
-            objectToSlice.GetComponent<Interactable>().RemoveOutline();
+            if (objectToSlice)
+            {
+                objectToSlice.GetComponent<Interactable>().RemoveOutline();
             
-            GameObject[] slices = SliceMesh(circle.transform.position, circle.transform.up);
-            GameObject upper = slices[0];
-            GameObject lower = slices[1];
+                GameObject[] slices = SliceMesh(circle.transform.position, circle.transform.up);
+                GameObject upper = slices[0];
+                GameObject lower = slices[1];
             
-            upper.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position);
-            lower.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position);
+                upper.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position);
+                lower.AddComponent<LemonSlice>().Setup(objectToSlice.transform.position);
             
-            HideSlicer();
+                HideSlicer();
 
-            ExitSliceMode();
+                ExitSliceMode();
 
-            StartCoroutine(DestroyOriginal(objectToSlice));
-
+                StartCoroutine(DestroyOriginal(objectToSlice));
+            }
         }
         
 
