@@ -14,7 +14,11 @@ namespace Code.Scripts
         [SerializeField] private Transform sugarSpoonSpawnPoint;
 
         [SerializeField] private GameObject[] liquidLayers;
+        
         [SerializeField] private VisualEffect vfx;
+        [SerializeField] private VisualEffect celebrateVfx;
+        [SerializeField] private GameObject canvas;
+        
         private int layerCount = 0;
 
         private float lemonJuice = 0f;
@@ -127,6 +131,9 @@ namespace Code.Scripts
         private void LemonadeMade()
         {
             Debug.Log("Congrats you made lemonade!");
+            gameObject.GetComponent<AudioSource>().Play();
+            celebrateVfx.Play();
+            canvas.SetActive(true);
         }
 
         private void UpdateLiquidColour()
