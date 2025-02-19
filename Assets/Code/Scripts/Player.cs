@@ -179,9 +179,12 @@ namespace Code.Scripts
                         // If you're looking at a cutting board, enter slicing mode
                         else if (lastInteractable.GetComponent<LemonSlicer>() is { } slicer)
                         {
-                            slicer.EnterSliceMode();
-                            currentLemonSlicer = slicer;
-                            state = State.Slicing;
+                            if (slicer.HasLemon())
+                            {
+                                slicer.EnterSliceMode();
+                                currentLemonSlicer = slicer;
+                                state = State.Slicing;
+                            }
 
                         }
                     

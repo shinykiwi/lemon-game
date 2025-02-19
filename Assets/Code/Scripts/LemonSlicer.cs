@@ -62,6 +62,11 @@ namespace Code.Scripts
             }
         }
 
+        public bool HasLemon()
+        {
+            return objectToSlice;
+        }
+
         public void InitiateSlice()
         {
             KnifeCutSequence();
