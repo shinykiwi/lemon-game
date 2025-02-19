@@ -126,7 +126,7 @@ namespace Code.Scripts
 
         private void LemonadeMade()
         {
-            
+            Debug.Log("Congrats you made lemonade!");
         }
 
         private void UpdateLiquidColour()
