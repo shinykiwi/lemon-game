@@ -35,10 +35,13 @@ public class Sink : Interactable
     {
         yield return new WaitForSeconds(clipLength);
 
-        audioSource.clip = tapLoopSound;
-        audioSource.loop = true;
-        audioSource.Play();
-
+        if (audioSource.clip.Equals(tapOnSound))
+        {
+            audioSource.clip = tapLoopSound;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+        
     }
 
     public void ToggleTap()
@@ -61,6 +64,7 @@ public class Sink : Interactable
         audioSource.loop = false;
         audioSource.clip = tapOnSound;
         audioSource.Play();
+        
         StartCoroutine(StartWaterLoopAfter(tapOnSound.length));
     }
 
