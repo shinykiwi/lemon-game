@@ -439,6 +439,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: e229fcfcb45b34f57ad0948df5a59197, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f2399dc417a734946be00f7707d5bc7b, type: 2}
     - target: {fileID: 919132149155446097, guid: e229fcfcb45b34f57ad0948df5a59197, type: 3}
       propertyPath: m_Name
       value: Crate

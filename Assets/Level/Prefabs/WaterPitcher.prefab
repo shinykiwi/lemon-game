@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9871ad83b42cd4228b56de390d2adebc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1eff3e6ba064fa44abb24a71a6f2748f, type: 2}
     - target: {fileID: 919132149155446097, guid: 9871ad83b42cd4228b56de390d2adebc, type: 3}
       propertyPath: m_Name
       value: WaterPitcher
@@ -84,6 +88,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
+  impactSound: {fileID: 0}
+  water: 0
+  vfx: {fileID: 0}
 --- !u!64 &7791769103899387553
 MeshCollider:
   m_ObjectHideFlags: 0
