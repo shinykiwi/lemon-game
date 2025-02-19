@@ -63,7 +63,7 @@ namespace Code.Scripts
             return water > 0;
         }
 
-        public void ToggleWaterPour(LemonadePitcher l)
+        public bool ToggleWaterPour(LemonadePitcher l)
         {
             lemonadePitcher = l;
             // If not pouring, pour water
@@ -73,11 +73,13 @@ namespace Code.Scripts
                 Quaternion q = transform.rotation;
                 transform.DOLocalRotate(new Vector3(pouringAngle, q.y, q.z), 0.5f);
                 vfx.Play();
+                return true;
             }
             // If already pouring, stop pouring
             else
             {
                 StopPouring();
+                return false;
             }
         
         }

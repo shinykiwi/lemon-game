@@ -1824,6 +1824,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 447e53836fa279346b0926d971e8d340, type: 3}
   - {fileID: 8300000, guid: a26852f894cdc4046b8fbb0aebfe8437, type: 3}
   lemonSliceSound: {fileID: 8300000, guid: 0160d4b0fd7f5dc41a6e1eeb25259dec, type: 3}
+  putBackSugar: {fileID: 8300000, guid: e84b164d4963c5446ba416da7644fcdf, type: 3}
+  takeSugar: {fileID: 8300000, guid: 4b6206dd353e0694a99180c0399a5b7b, type: 3}
+  trash: {fileID: 8300000, guid: 57458a6c56a4c624383e3f066ad2ac96, type: 3}
+  pourWater: {fileID: 8300000, guid: fe9ad9d9c413c524385d5389c83dd060, type: 3}
 --- !u!82 &259906449
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3844,7 +3848,7 @@ Transform:
   m_GameObject: {fileID: 618532760}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.82550764, z: -0, w: 0.5643909}
-  m_LocalPosition: {x: 1.6599993, y: 1.5200002, z: -0.49999994}
+  m_LocalPosition: {x: 2.51, y: 0.83, z: -0.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

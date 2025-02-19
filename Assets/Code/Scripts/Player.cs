@@ -260,6 +260,7 @@ namespace Code.Scripts
                                 {
                                     // Adds sugar amount to the lemonade pitcher
                                     currentLemonadePitcher.AddSugar(sugarSpoon.RemoveSugar());
+                                    playerAudio.PutSugarBack();
                                 }
                             }
                             
@@ -284,11 +285,13 @@ namespace Code.Scripts
                                 if (sugarSpoon.HasSugar())
                                 {
                                     sugarSpoon.RemoveSugar();
+                                    playerAudio.PutSugarBack();
                                 }
                                 // Otherwise, put sugar on the spoon
                                 else
                                 {
                                     sugarSpoon.AddSugar();
+                                    playerAudio.TakeSugar();
                                 }
                             
                             }
@@ -304,6 +307,7 @@ namespace Code.Scripts
                                 Destroy(itemInHand.gameObject);
                                 itemInHand = null;
                                 state = State.Idle;
+                                playerAudio.Trash();
                             }
                         }
                     
@@ -316,6 +320,7 @@ namespace Code.Scripts
                                 if (sink.IsTapOn())
                                 {
                                     waterPitcher.AddWater();
+                                    playerAudio.PourWater();
                                 }
                     
                             }
@@ -364,7 +369,10 @@ namespace Code.Scripts
                     // Normal pouring situation
                     else
                     {
-                        currentWaterPitcher.ToggleWaterPour(currentLemonadePitcher);
+                        bool pouring = currentWaterPitcher.ToggleWaterPour(currentLemonadePitcher);
+                        
+                        if(pouring) playerAudio.PourWater();
+                        else playerAudio.Stop();
                     }
                 
                     break;
