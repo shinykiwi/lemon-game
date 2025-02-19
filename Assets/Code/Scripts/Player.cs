@@ -73,6 +73,8 @@ namespace Code.Scripts
             hand.DetachChildren();
             itemInHand.GetComponent<Rigidbody>().isKinematic = false;
             itemInHand.EnableInteract();
+            
+            itemInHand.GetComponent<Holdable>().PlayDropSound();
             itemInHand = null;
         
             //StartCoroutine(nameof(EnableGeneralInteraction));
@@ -148,9 +150,9 @@ namespace Code.Scripts
                         }
                         // Throw whatever object is in your hand
                         throwController.ThrowObject(itemInHand);
+                        itemInHand.GetComponent<Holdable>().PlayDropSound();
                         itemInHand = null;
 
-                        
                         
                         state = State.Idle;
                         // woosh sound?
