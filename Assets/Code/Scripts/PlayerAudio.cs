@@ -12,6 +12,13 @@ namespace Code.Scripts
         [Header("Lemon Sounds")]
         [SerializeField] private AudioClip[] lemonSqueezeSounds;
         [SerializeField] private AudioClip lemonSliceSound;
+
+        [Header("Other Sounds")] 
+        [SerializeField] private AudioClip putBackSugar;
+        [SerializeField]private AudioClip takeSugar;
+        [SerializeField]private AudioClip trash;
+        [SerializeField]private AudioClip pourWater;
+        
     
 
         private AudioSource audioSource;
@@ -78,6 +85,30 @@ namespace Code.Scripts
             Play(takeFromBoxSound);
         }
 
-    
+
+        public void PutSugarBack()
+        {
+            Play(putBackSugar);
+        }
+
+        public void TakeSugar()
+        {
+            Play(takeSugar);
+        }
+
+        public void Trash()
+        {
+            Play(trash);
+        }
+
+        public void PourWater()
+        {
+            Play(pourWater);
+        }
+
+        public void Stop()
+        {
+            audioSource.Stop();
+        }
     }
 }
