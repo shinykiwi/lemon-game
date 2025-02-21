@@ -71,7 +71,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 9b1c05318ef200247ada1e1977d93d3e, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: 2100000, guid: 589ab4337b5114efbb052a678f30c717, type: 2}
+      objectReference: {fileID: 2100000, guid: bca2907c95c72400181e9991b382c74b, type: 2}
     - target: {fileID: 919132149155446097, guid: 9b1c05318ef200247ada1e1977d93d3e, type: 3}
       propertyPath: m_Name
       value: WallWindow
