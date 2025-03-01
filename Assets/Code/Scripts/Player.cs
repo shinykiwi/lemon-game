@@ -168,6 +168,8 @@ namespace Code.Scripts
             switch (state)
             {
                 case State.Idle:
+                    if (lastInteractable)
+                    {
                         // If you're looking at something that you can hold, pick it up
                         if (lastInteractable.GetComponent<Holdable>() is { } holdable)
                         {
@@ -198,8 +200,9 @@ namespace Code.Scripts
                         {
                             sink.ToggleTap();
                         }
-
-                        break;
+                    }
+                    
+                    break;
                 
                 case State.Holding:
 
