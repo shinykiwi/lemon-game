@@ -162,12 +162,25 @@ namespace Code.Scripts
         
         }
 
+        private void HideInteractablesByType<T>() where T : Interactable
+        {
+            T[] objects = FindObjectsByType<T>(FindObjectsSortMode.None);
+
+            foreach (Interactable i in objects)
+            {
+                i.DisableInteract();
+            }
+        }
+
         // Right click
         public void OnInteract(InputValue value)
         {
             switch (state)
             {
                 case State.Idle:
+                    
+                    HideInteractablesByType<TrashCan>();
+                    
                     if (lastInteractable)
                     {
                         // If you're looking at something that you can hold, pick it up
