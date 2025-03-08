@@ -169,6 +169,7 @@ namespace Code.Scripts
             foreach (Interactable i in objects)
             {
                 i.DisableInteract();
+                Debug.Log("Disabling" + i.name);
             }
         }
 
