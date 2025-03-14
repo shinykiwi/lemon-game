@@ -1,8 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.VFX;
+using static Code.Scripts.InteractHelper;
 
-namespace Code.Scripts
+namespace Code.Scripts.Holdables
 {
     public class WaterPitcher : Holdable
     {
@@ -95,6 +96,21 @@ namespace Code.Scripts
         public bool IsPouring()
         {
             return pouring;
+        }
+
+        public override void PickUp()
+        {
+            base.PickUp();
+
+            if (HasWater())
+            {
+                EnableInteractablesByType<LemonadePitcher>();
+            }
+            else
+            {
+                EnableInteractablesByType<Sink>();
+            }
+            
         }
 
         private void Update()

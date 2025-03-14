@@ -1,6 +1,8 @@
+using Code.Scripts.Holdables;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Code.Scripts.InteractHelper;
 
 namespace Code.Scripts
 {
@@ -30,6 +32,7 @@ namespace Code.Scripts
         public State state = State.Idle;
 
         [SerializeField] private Transform hand;
+        [SerializeField] private HUD hud;
 
         private void Start()
         {
@@ -37,7 +40,8 @@ namespace Code.Scripts
             playerAudio = GetComponentInChildren<PlayerAudio>();
             throwController = gameObject.AddComponent<Throw>();
             lemonSplatter = GetComponent<LemonSplatter>();
-
+            
+            HideNonHoldables();
         }
 
         /// <summary>
@@ -58,10 +62,6 @@ namespace Code.Scripts
             // Turn off physics
             obj.GetComponent<Rigidbody>().isKinematic = true;
         
-            // // Make certain objects uninteractable
-            // LemonSlicer slicer = FindFirstObjectByType<LemonSlicer>();
-            // slicer.DisableInteract();
-        
             itemInHand = interactable;
         }
 
@@ -77,8 +77,7 @@ namespace Code.Scripts
             itemInHand.GetComponent<Holdable>().PlayDropSound();
             itemInHand = null;
         
-            //StartCoroutine(nameof(EnableGeneralInteraction));
-        
+            ResetAll();
         }
 
         private void SnapToCuttingBoard(Interactable interactable, LemonSlicer slicer)
@@ -86,6 +85,8 @@ namespace Code.Scripts
             SnapToLocation(interactable, slicer.GetObjectSpawn());
 
             slicer.SetObjectToSlice(interactable);
+            
+            ResetAll();
         }
 
         private void SnapToLocation(Interactable interactable, Transform parent)
@@ -103,6 +104,8 @@ namespace Code.Scripts
             obj.GetComponent<Rigidbody>().isKinematic = true;
 
             itemInHand = null;
+            
+            ResetAll();
 
         }
 
@@ -122,14 +125,25 @@ namespace Code.Scripts
                 // If it's something that can have an outline
                 if (hitObject.GetComponent<Interactable>() is { } interactable)
                 {
-                    //Debug.Log(interactable.gameObject.name);
+                   // Hides outline of last looked at
                     if(lastInteractable) lastInteractable.HideOutline();
-                    interactable.ShowOutline();
+                    
+                    // If you're able to interact with object, show its outline 
+                    if (interactable.CanInteract())
+                    {
+                        interactable.ShowOutline();
+                        hud.Set(interactable);
+                        hud.Show();
+                    }
+                    
+                    // Save the interactable for later
                     lastInteractable = interactable;
                 }
                 else
                 {
+                    // Hides outline of last looked at
                     if (lastInteractable) lastInteractable.HideOutline();
+                    hud.Hide();
                     lastInteractable = null;
                 }
             }
@@ -152,7 +166,8 @@ namespace Code.Scripts
                         throwController.ThrowObject(itemInHand);
                         itemInHand.GetComponent<Holdable>().PlayDropSound();
                         itemInHand = null;
-
+                        
+                        ResetAll();
                         
                         state = State.Idle;
                         // woosh sound?
@@ -162,17 +177,6 @@ namespace Code.Scripts
         
         }
 
-        private void HideInteractablesByType<T>() where T : Interactable
-        {
-            T[] objects = FindObjectsByType<T>(FindObjectsSortMode.None);
-
-            foreach (Interactable i in objects)
-            {
-                i.DisableInteract();
-                Debug.Log("Disabling" + i.name);
-            }
-        }
-
         // Right click
         public void OnInteract(InputValue value)
         {
@@ -180,15 +184,13 @@ namespace Code.Scripts
             {
                 case State.Idle:
                     
-                    HideInteractablesByType<TrashCan>();
-                    
-                    if (lastInteractable)
+                    if (lastInteractable && lastInteractable.CanInteract())
                     {
                         // If you're looking at something that you can hold, pick it up
                         if (lastInteractable.GetComponent<Holdable>() is { } holdable)
                         {
+                            holdable.PickUp();
                             AddToHand(holdable);
-                            playerAudio.PickUp();
                             state = State.Holding;
                         }
             
@@ -201,7 +203,6 @@ namespace Code.Scripts
                                 currentLemonSlicer = slicer;
                                 state = State.Slicing;
                             }
-
                         }
                     
                         // If you're looking at a door
@@ -210,9 +211,18 @@ namespace Code.Scripts
                             door.Use();
                         }
                     
+                        // If you're looking at a sink
                         else if (lastInteractable.GetComponent<Sink>() is { } sink)
                         {
                             sink.ToggleTap();
+                        }
+                        
+                        else if (lastInteractable.GetComponent<KnifeSet>() is { } knifeSet)
+                        {
+                            Knife knife = (Knife) knifeSet.GetKnife();
+                            knife.PickUp();
+                            AddToHand(knife);
+                            state = State.Holding;
                         }
                     }
                     
@@ -328,6 +338,7 @@ namespace Code.Scripts
                                 itemInHand = null;
                                 state = State.Idle;
                                 playerAudio.Trash();
+                                ResetAll();
                             }
                         }
                     
@@ -352,7 +363,7 @@ namespace Code.Scripts
                             // }
                         }
                     
-                    break;
+                        break;
             
                 case State.Slicing:
                     currentLemonSlicer.InitiateSlice();

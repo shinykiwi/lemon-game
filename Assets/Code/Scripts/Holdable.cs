@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using static Code.Scripts.InteractHelper;
 
 namespace Code.Scripts
 {
-    //[RequireComponent(typeof(Rigidbody))]
     public class Holdable : Interactable
     {
         [SerializeField] private AudioClip impactSound;
@@ -25,6 +25,12 @@ namespace Code.Scripts
                 playerAudio.Play(impactSound);
             }
             
+        }
+
+        public virtual void PickUp()
+        {
+            playerAudio.PickUp();
+            HideAllInteractables();
         }
 
         /// <summary>
@@ -51,6 +57,11 @@ namespace Code.Scripts
                 ImpactSound();
             }
             
+        }
+
+        public override string ToString()
+        {
+            return "Pick Up";
         }
     }
 }

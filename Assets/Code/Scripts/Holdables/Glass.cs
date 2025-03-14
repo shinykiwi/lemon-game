@@ -1,4 +1,4 @@
-namespace Code.Scripts
+namespace Code.Scripts.Holdables
 {
     public class Glass : Holdable
     {

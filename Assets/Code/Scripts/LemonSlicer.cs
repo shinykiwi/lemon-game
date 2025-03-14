@@ -1,4 +1,5 @@
 using System.Collections;
+using Code.Scripts.Holdables;
 using EzySlice;
 using TMPro;
 using Unity.Cinemachine;
@@ -9,11 +10,6 @@ namespace Code.Scripts
 {
     public class LemonSlicer : Interactable
     {
-        [Header("Debug Only")] 
-        [SerializeField] private bool debugOn = true;
-        [SerializeField] private TextMeshProUGUI xText;
-        [SerializeField] private TextMeshProUGUI zText;
-        [SerializeField] private TextMeshProUGUI scaleText;
     
         [Header("Parameters")]
         [SerializeField] GameObject circle;
@@ -202,13 +198,6 @@ namespace Code.Scripts
             // Decreases the size of the circle as it moves further away from the center
             scale = (-scaleFactor * Mathf.Pow(y, 2)) + initialCircleScale;
             circle.transform.localScale = new Vector3(scale, scale, scale);
-
-            if (debugOn)
-            {
-                xText.text = x.ToString("0.000");
-                zText.text = y.ToString("0.000");
-                scaleText.text = scale.ToString("0.000");
-            }
         }
         
 
@@ -220,6 +209,10 @@ namespace Code.Scripts
         {
             objectToSlice = interactable.gameObject;
         }
-        
+
+        public override string ToString()
+        {
+            return HasLemon() ? "Slice" : "Place";
+        }
     }
 }

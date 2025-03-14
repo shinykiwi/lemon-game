@@ -108,7 +108,9 @@ namespace Code.Scripts
             return canInteract;
         }
         
-        
-    
+        public override string ToString()
+        {
+            return "Use";
+        }
     }
 }

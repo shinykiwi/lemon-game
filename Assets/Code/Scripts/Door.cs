@@ -58,5 +58,10 @@ namespace Code.Scripts
                 Close();
             }
         }
+
+        public override string ToString()
+        {
+            return isOpen ? "Close" : "Open";
+        }
     }
 }
