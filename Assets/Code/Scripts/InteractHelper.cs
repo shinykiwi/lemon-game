@@ -26,16 +26,22 @@ namespace Code.Scripts
             }
         }
 
-        public static void EnableAllHoldables()
+        public static void EnableAllEmptyHand()
         {
             EnableInteractablesByType<Holdable>();
             EnableInteractablesByType<Door>();
             EnableInteractablesByType<Sink>();
+            KnifeSet knifeSet = FindFirstObjectByType<KnifeSet>();
+            if (!knifeSet.HasBeenUsed())
+            {
+                knifeSet.EnableInteract();
+            }
+            
         }
 
         public static void ResetAll()
         {
-            EnableAllHoldables();
+            EnableAllEmptyHand();
             HideNonHoldables();
         }
 
@@ -43,11 +49,6 @@ namespace Code.Scripts
         {
             HideInteractablesByType<TrashCan>();
             HideInteractablesByType<SugarJar>();
-            if (! (bool) FindFirstObjectByType<LemonSlicer>()?.HasLemon())
-            {
-                HideInteractablesByType<LemonSlicer>();
-            }
-            
             HideInteractablesByType<LemonadePitcher>();
         }
 

@@ -39,6 +39,11 @@ public class HUD : MonoBehaviour
         SetRightClick();
     }
 
+    public void Set(string s)
+    {
+        SetText(s);
+    }
+
     public void Hide()
     {
         container.SetActive(false);

@@ -29,18 +29,18 @@ namespace Code.Scripts
 
         public virtual void PickUp()
         {
+            // Play pick up sound
             playerAudio.PickUp();
             HideAllInteractables();
         }
 
-        /// <summary>
-        /// Lets impact sounds be played upon collision but only if triggered from a drop.
-        /// </summary>
-        public void PlayDropSound()
+        public virtual void Drop()
         {
+            // Play drop sound
             canPlay = true;
             StartCoroutine(DisablePlay());
-
+            
+            EnableAllEmptyHand();
         }
 
         private IEnumerator DisablePlay()

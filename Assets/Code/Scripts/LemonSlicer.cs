@@ -46,6 +46,7 @@ namespace Code.Scripts
             playerAudio = FindFirstObjectByType<PlayerAudio>();
             
             HideSlicer();
+            DisableInteract();
         }
 
         void Update()
@@ -112,7 +113,6 @@ namespace Code.Scripts
         /// </summary>
         private void ExitSliceMode()
         {
-            EnableInteract();
             camera.enabled = false;
             knifeOn = false;
             FindFirstObjectByType<ReticleController>().ShowReticle();
@@ -213,6 +213,11 @@ namespace Code.Scripts
         public override string ToString()
         {
             return HasLemon() ? "Slice" : "Place";
+        }
+
+        public void PlaceLemon()
+        {
+            DisableInteract();
         }
     }
 }

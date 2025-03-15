@@ -74,10 +74,10 @@ namespace Code.Scripts
             itemInHand.GetComponent<Rigidbody>().isKinematic = false;
             itemInHand.EnableInteract();
             
-            itemInHand.GetComponent<Holdable>().PlayDropSound();
+            itemInHand.GetComponent<Holdable>().Drop();
             itemInHand = null;
         
-            ResetAll();
+            //ResetAll();
         }
 
         private void SnapToCuttingBoard(Interactable interactable, LemonSlicer slicer)
@@ -86,7 +86,7 @@ namespace Code.Scripts
 
             slicer.SetObjectToSlice(interactable);
             
-            ResetAll();
+            EnableAllEmptyHand();
         }
 
         private void SnapToLocation(Interactable interactable, Transform parent)
@@ -105,7 +105,7 @@ namespace Code.Scripts
 
             itemInHand = null;
             
-            ResetAll();
+            //ResetAll();
 
         }
 
@@ -132,6 +132,7 @@ namespace Code.Scripts
                     if (interactable.CanInteract())
                     {
                         interactable.ShowOutline();
+                        hud.SetRightClick();
                         hud.Set(interactable);
                         hud.Show();
                     }
@@ -143,7 +144,16 @@ namespace Code.Scripts
                 {
                     // Hides outline of last looked at
                     if (lastInteractable) lastInteractable.HideOutline();
-                    hud.Hide();
+                    if (itemInHand)
+                    {
+                        hud.Set("Throw");
+                        hud.SetLeftClick();
+                    }
+                    else
+                    {
+                        hud.Hide();
+                    }
+                    
                     lastInteractable = null;
                 }
             }
@@ -164,10 +174,10 @@ namespace Code.Scripts
                         }
                         // Throw whatever object is in your hand
                         throwController.ThrowObject(itemInHand);
-                        itemInHand.GetComponent<Holdable>().PlayDropSound();
+                        itemInHand.GetComponent<Holdable>().Drop();
                         itemInHand = null;
                         
-                        ResetAll();
+                        //ResetAll();
                         
                         state = State.Idle;
                         // woosh sound?
@@ -192,17 +202,6 @@ namespace Code.Scripts
                             holdable.PickUp();
                             AddToHand(holdable);
                             state = State.Holding;
-                        }
-            
-                        // If you're looking at a cutting board, enter slicing mode
-                        else if (lastInteractable.GetComponent<LemonSlicer>() is { } slicer)
-                        {
-                            if (slicer.HasLemon())
-                            {
-                                slicer.EnterSliceMode();
-                                currentLemonSlicer = slicer;
-                                state = State.Slicing;
-                            }
                         }
                     
                         // If you're looking at a door
@@ -246,9 +245,20 @@ namespace Code.Scripts
                             if (itemInHand as LemonSlice)
                             {
                                 SnapToCuttingBoard(itemInHand, lemonSlicer);
+                                lemonSlicer.PlaceLemon();
                                 playerAudio.PutBack();
                                 state = State.Idle;
-
+                            }
+                            
+                            else if (itemInHand as Knife)
+                            {
+                                if (lemonSlicer.HasLemon())
+                                {
+                                    DropFromHand();
+                                    lemonSlicer.EnterSliceMode();
+                                    currentLemonSlicer = lemonSlicer;
+                                    state = State.Slicing;
+                                }
                             }
                         }
             
@@ -338,7 +348,7 @@ namespace Code.Scripts
                                 itemInHand = null;
                                 state = State.Idle;
                                 playerAudio.Trash();
-                                ResetAll();
+                                //ResetAll();
                             }
                         }
                     
